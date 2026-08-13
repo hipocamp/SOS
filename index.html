@@ -12,7 +12,7 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; color: white; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; color: white; -webkit-tap-highlight-color: transparent; }
         .bg-gradient-red { background: radial-gradient(circle, #ef4444 0%, #7f1d1d 100%); }
         .panic-active { animation: ring 1.5s infinite; }
         @keyframes ring {
@@ -30,8 +30,8 @@
     <!-- SELECCIÓ IDIOMA INICIAL -->
     <div id="lang-overlay" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center p-8 transition-all duration-500">
         <h1 class="text-3xl font-extrabold mb-2 tracking-tighter uppercase italic text-red-600">SOSPRO</h1>
-        <p class="text-slate-400 text-[10px] mb-10 font-bold uppercase tracking-widest">Select Safety Region</p>
-        <div class="grid grid-cols-1 gap-3 w-full max-w-xs text-center">
+        <p class="text-slate-400 text-[10px] mb-10 font-bold uppercase tracking-widest">Select Region & Language</p>
+        <div class="grid grid-cols-1 gap-3 w-full max-w-xs">
             <button onclick="setLang('ca')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all border-l-4 border-red-600">Català (+34)</button>
             <button onclick="setLang('es')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all border-l-4 border-red-600">Español (+34)</button>
             <button onclick="setLang('en')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all border-l-4 border-blue-600">English (+44)</button>
@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    <!-- MAIN APP -->
+    <!-- PANTALLA PRINCIPAL -->
     <div id="main-app" class="h-screen flex flex-col p-6 opacity-0 transition-opacity duration-1000">
         
         <header class="flex justify-between items-center mb-6">
@@ -48,13 +48,15 @@
                 <div class="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center font-black shadow-lg shadow-red-900/20">S</div>
                 <span class="font-black text-xl tracking-tighter uppercase italic">SOS<span class="text-red-600">PRO</span></span>
             </div>
-            <button onclick="toggleConfig()" class="p-3 glass rounded-full active:scale-90 transition-transform">⚙️</button>
+            <button onclick="toggleConfig()" class="p-3 glass rounded-full active:scale-90 transition-transform text-lg">⚙️</button>
         </header>
 
-        <div id="fall-status" class="glass rounded-2xl p-3 text-center mb-6 border-red-500/30">
+        <!-- Estatus de caigudes -->
+        <div id="fall-status-banner" class="glass rounded-2xl p-3 text-center mb-6 border-red-500/30">
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest" id="txt-fall-status">CAIGUDES: OFF</p>
         </div>
 
+        <!-- Botó SOS central -->
         <div class="flex-grow flex items-center justify-center relative">
             <div class="absolute w-72 h-72 border border-white/5 rounded-full animate-ping opacity-20"></div>
             <button id="main-sos-btn" onclick="executarSOS('whatsapp')" class="bg-gradient-red w-64 h-64 rounded-full flex flex-col items-center justify-center panic-active border-8 border-white/5 relative z-10 active:scale-95 transition-transform">
@@ -63,55 +65,59 @@
             </button>
         </div>
 
+        <!-- Eines ràpides -->
         <div class="grid grid-cols-2 gap-4 mt-8">
-            <button onclick="triggerSiren()" id="siren-btn" class="glass p-5 rounded-[2rem] flex flex-col items-center gap-2 transition-all">
+            <button onclick="triggerSiren()" id="siren-btn" class="glass p-5 rounded-[2rem] flex flex-col items-center gap-2 transition-all active:bg-white/10">
                 <span class="text-2xl">🔊</span>
                 <span class="text-[10px] font-bold uppercase tracking-widest" id="txt-siren">Sirena</span>
             </button>
-            <button onclick="executarSOS('sms')" class="glass p-5 rounded-[2rem] flex flex-col items-center gap-2 transition-all">
+            <button onclick="executarSOS('sms')" class="glass p-5 rounded-[2rem] flex flex-col items-center gap-2 transition-all active:bg-white/10">
                 <span class="text-2xl">📩</span>
                 <span class="text-[10px] font-bold uppercase tracking-widest" id="txt-sms">Direct SMS</span>
             </button>
         </div>
 
         <footer class="mt-8 text-center opacity-20">
-            <p class="text-[9px] font-bold tracking-[0.5em] uppercase">NeurekaLAB Protection</p>
+            <p class="text-[9px] font-bold tracking-[0.5em] uppercase italic">NeurekaLAB Shield Technology</p>
         </footer>
     </div>
 
-    <!-- PANTALLA CAIGUDA -->
+    <!-- PANTALLA EMERGÈNCIA CAIGUDA -->
     <div id="fall-overlay" class="hidden fixed inset-0 z-[200] bg-red-600 flex flex-col items-center justify-center p-8 text-center">
-        <h2 class="text-3xl font-black mb-4 uppercase italic" id="txt-fall-detected">Impacte!</h2>
-        <p class="mb-8 font-bold" id="txt-fall-sub">SOS automàtic en:</p>
+        <h2 class="text-3xl font-black mb-4 uppercase italic" id="txt-fall-detected">CAIGUDA DETECTADA!</h2>
+        <p class="mb-8 font-bold" id="txt-fall-sub">S'enviarà un SOS automàtic en:</p>
         <div id="fall-timer" class="text-9xl font-black mb-12 italic">30</div>
         <button onclick="cancelFall()" class="bg-black text-white w-full p-6 rounded-3xl font-black text-xl uppercase italic shadow-2xl active:scale-95">ESTIC BÉ / CANCEL·LAR</button>
     </div>
 
-    <!-- CONFIGURACIÓ -->
+    <!-- PANTALLA CONFIGURACIÓ -->
     <div id="config-ui" class="hidden fixed inset-0 z-[150] bg-[#050505] p-6 flex flex-col overflow-y-auto">
         <div class="flex justify-between items-center mb-8">
-            <h2 class="text-xl font-black text-red-500 italic uppercase">Setup</h2>
+            <h2 class="text-xl font-black text-red-500 italic uppercase tracking-tighter">Setup SOSPRO</h2>
             <button onclick="toggleConfig()" class="text-slate-500 text-xs font-bold uppercase tracking-widest">Tancar</button>
         </div>
         
         <div class="space-y-6 flex-grow pb-10">
+            <!-- Números -->
             <div class="space-y-3 text-left">
                 <label class="text-[10px] font-bold text-slate-500 uppercase ml-2" id="txt-label-contacts">Fins a 5 Contactes</label>
-                <input type="tel" id="tel1" class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500 transition-colors text-sm font-mono">
-                <input type="tel" id="tel2" class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500 transition-colors text-sm font-mono">
-                <input type="tel" id="tel3" class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500 transition-colors text-sm font-mono">
-                <input type="tel" id="tel4" class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500 transition-colors text-sm font-mono">
-                <input type="tel" id="tel5" class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500 transition-colors text-sm font-mono">
+                <input type="tel" id="tel1" class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500 transition-colors text-sm font-mono tracking-wider">
+                <input type="tel" id="tel2" class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500 transition-colors text-sm font-mono tracking-wider">
+                <input type="tel" id="tel3" class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500 transition-colors text-sm font-mono tracking-wider">
+                <input type="tel" id="tel4" class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500 transition-colors text-sm font-mono tracking-wider">
+                <input type="tel" id="tel5" class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500 transition-colors text-sm font-mono tracking-wider">
             </div>
 
+            <!-- Toggle Sensor -->
             <div class="glass p-5 rounded-3xl flex items-center justify-between">
                 <div class="text-left">
-                    <p class="font-bold text-sm" id="txt-label-fall">Sensor d'Impacte</p>
-                    <p class="text-[9px] text-slate-400 uppercase tracking-widest" id="txt-fall-desc">Accelerometer based</p>
+                    <p class="font-bold text-sm" id="txt-label-fall">Detecció de caigudes</p>
+                    <p class="text-[9px] text-slate-400 uppercase tracking-widest" id="txt-fall-desc">Accelerometer sensor</p>
                 </div>
-                <input type="checkbox" id="fall-toggle" onchange="toggleFallSensor()" class="w-6 h-6 accent-red-500">
+                <input type="checkbox" id="fall-toggle" onchange="toggleFallSensor()" class="w-6 h-6 accent-red-500 rounded-full">
             </div>
 
+            <!-- Idioma -->
             <div class="text-left">
                 <label class="text-[10px] font-bold text-slate-500 uppercase ml-2" id="txt-label-lang">Language / Idioma</label>
                 <select onchange="setLang(this.value)" id="lang-select" class="w-full glass p-4 rounded-2xl outline-none bg-black font-bold">
@@ -124,23 +130,25 @@
             </div>
         </div>
 
-        <button onclick="guardarConfig()" class="w-full bg-red-600 p-5 rounded-3xl font-black uppercase tracking-widest shadow-xl mt-6 italic sticky bottom-0" id="btn-save">Desar</button>
+        <button onclick="guardarConfig()" class="w-full bg-red-600 p-5 rounded-3xl font-black uppercase tracking-widest shadow-xl mt-6 italic sticky bottom-0 active:bg-red-700" id="btn-save">Desar</button>
     </div>
 
     <script>
+        // DICCIONARI DE TRADUCCIONS (Corregit amb "Detecció de caigudes")
         const translations = {
-            ca: { prefix: "+34", title: "ALERTA", fall_status: "Impacte: ", on: "ACTIU", off: "OFF", siren: "Sirena", sms: "SMS Direct", fall_det: "IMPACTE!", fall_sub: "SOS en:", cancel: "ESTIGUEU BÉ / CANCEL·LAR", label_contacts: "Fins a 5 Contactes", label_fall: "Sensor d'Impacte", fall_desc: "Basat en acceleròmetre", save: "Desar", msg: "EMERGÈNCIA! Ubicació: " },
-            es: { prefix: "+34", title: "ALERTA", fall_status: "Impacto: ", on: "ACTIVO", off: "OFF", siren: "Sirena", sms: "SMS Directo", fall_det: "¡IMPACTO!", fall_sub: "SOS en:", cancel: "ESTOY BIEN / CANCELAR", label_contacts: "Hasta 5 Contactos", label_fall: "Sensor de Impacto", fall_desc: "Basado en acelerómetro", save: "Guardar", msg: "¡EMERGENCIA! Ubicación: " },
-            en: { prefix: "+44", title: "ALERT", fall_status: "Impact: ", on: "ACTIVE", off: "OFF", siren: "Siren", sms: "Direct SMS", fall_det: "IMPACT!", fall_sub: "SOS in:", cancel: "I'M OK / CANCEL", label_contacts: "Up to 5 Contacts", label_fall: "Impact Sensor", fall_desc: "Accelerometer based", save: "Save", msg: "EMERGENCY! My location: " },
-            fr: { prefix: "+33", title: "ALERTE", fall_status: "Impact: ", on: "ACTIF", off: "OFF", siren: "Sirène", sms: "SMS Direct", fall_det: "IMPACT!", fall_sub: "SOS en:", cancel: "JE VAIS BIEN / ANNULER", label_contacts: "Jusqu'à 5 Contacts", label_fall: "Capteur d'impact", fall_desc: "Via accéléromètre", save: "Enregistrer", msg: "URGENCE! Mon emplacement: " },
-            de: { prefix: "+49", title: "ALARM", fall_status: "Aufprall: ", on: "AKTIV", off: "OFF", siren: "Sirene", sms: "Direkt SMS", fall_det: "AUFPRALL!", fall_sub: "SOS in:", cancel: "MIR GEHT ES GUT", label_contacts: "Bis zu 5 Kontakte", label_fall: "Aufprallsensor", fall_desc: "Beschleunigungsmesser", save: "Speichern", msg: "NOTFALL! Standort: " }
+            ca: { prefix: "+34", title: "ALERTA", fall_status: "Caigudes: ", on: "ACTIU", off: "OFF", siren: "Sirena", sms: "SMS Direct", fall_det: "CAIGUDA DETECTADA!", fall_sub: "SOS automàtic en:", cancel: "ESTIGUEU BÉ / CANCEL·LAR", label_contacts: "Fins a 5 Contactes", label_fall: "Detecció de caigudes", fall_desc: "Basat en acceleròmetre", save: "Desar", msg: "EMERGÈNCIA! Ubicació: " },
+            es: { prefix: "+34", title: "ALERTA", fall_status: "Caídas: ", on: "ACTIVO", off: "OFF", siren: "Sirena", sms: "SMS Directo", fall_det: "¡CAÍDA DETECTADA!", fall_sub: "SOS automático en:", cancel: "ESTOY BIEN / CANCELAR", label_contacts: "Hasta 5 Contactos", label_fall: "Detección de caídas", fall_desc: "Basado en acelerómetro", save: "Guardar", msg: "¡EMERGENCIA! Ubicación: " },
+            en: { prefix: "+44", title: "ALERT", fall_status: "Falls: ", on: "ACTIVE", off: "OFF", siren: "Siren", sms: "Direct SMS", fall_det: "FALL DETECTED!", fall_sub: "Automatic SOS in:", cancel: "I'M OK / CANCEL", label_contacts: "Up to 5 Contacts", label_fall: "Fall Detection", fall_desc: "Accelerometer based", save: "Save", msg: "EMERGENCY! My location: " },
+            fr: { prefix: "+33", title: "ALERTE", fall_status: "Chutes: ", on: "ACTIF", off: "OFF", siren: "Sirène", sms: "SMS Direct", fall_det: "CHUTE DÉTECTÉE!", fall_sub: "SOS automatique dans:", cancel: "JE VAIS BIEN / ANNULER", label_contacts: "Jusqu'à 5 Contacts", label_fall: "Détection de chute", fall_desc: "Via accéléromètre", save: "Enregistrer", msg: "URGENCE! Mon emplacement: " },
+            de: { prefix: "+49", title: "ALARM", fall_status: "Sturz: ", on: "AKTIV", off: "OFF", siren: "Sirene", sms: "Direkt SMS", fall_det: "STURZ ERKANNT!", fall_sub: "Automatischer SOS in:", cancel: "MIR GEHT ES GUT", label_contacts: "Bis zu 5 Kontakte", label_fall: "Sturzerkennung", fall_desc: "Beschleunigungsmesser", save: "Speichern", msg: "NOTFALL! Standort: " }
         };
 
         let currentLang = localStorage.getItem('sos_lang') || null;
-        let fallActive = false;
+        let fallActive = JSON.parse(localStorage.getItem('sos_fall_active')) || false;
         let sirenInterval = null;
         let fallTimer = null;
 
+        // INICIAR
         if (currentLang) {
             setLang(currentLang);
             document.getElementById('lang-overlay').classList.add('hidden');
@@ -162,11 +170,11 @@
             document.getElementById('btn-save').innerText = t.save;
             document.getElementById('lang-select').value = lang;
             
-            // AUTO-PREFIX: Omple camps buits amb el prefix del país triat
+            // Auto-prefix intel·ligent per als 5 telèfons
             for(let i=1; i<=5; i++) {
                 let el = document.getElementById('tel'+i);
                 let savedValue = localStorage.getItem('sos_t'+i);
-                if (!savedValue || savedValue === "") {
+                if (!savedValue || savedValue === "" || savedValue === translations.ca.prefix || savedValue === translations.en.prefix) {
                     el.value = t.prefix;
                 } else {
                     el.value = savedValue;
@@ -181,7 +189,7 @@
         function updateFallStatusUI() {
             const t = translations[currentLang];
             document.getElementById('txt-fall-status').innerText = t.fall_status + (fallActive ? t.on : t.off);
-            document.getElementById('fall-status').style.borderColor = fallActive ? "rgba(239, 68, 68, 0.5)" : "rgba(255, 255, 255, 0.1)";
+            document.getElementById('fall-status-banner').style.borderColor = fallActive ? "rgba(239, 68, 68, 0.5)" : "rgba(255, 255, 255, 0.1)";
             document.getElementById('fall-toggle').checked = fallActive;
         }
 
@@ -207,11 +215,11 @@
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(Math.random() * 1000 + 1000, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(Math.random() * 600 + 1200, audioCtx.currentTime);
                 osc.connect(gain); gain.connect(audioCtx.destination);
                 osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-                btn.style.background = (btn.style.background === "") ? "rgba(239, 68, 68, 0.6)" : "";
-            }, 100);
+                btn.style.background = (btn.style.background === "") ? "rgba(239, 68, 68, 0.5)" : "";
+            }, 120);
         }
 
         function executarSOS(tipus) {
@@ -231,11 +239,12 @@
                 } else {
                     window.location.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
                 }
-            }, () => { alert("GPS error."); });
+            }, () => { alert("Activeu el GPS."); });
         }
 
         function toggleFallSensor() {
             fallActive = document.getElementById('fall-toggle').checked;
+            localStorage.setItem('sos_fall_active', fallActive);
             if (fallActive) {
                 if (typeof DeviceMotionEvent.requestPermission === 'function') {
                     DeviceMotionEvent.requestPermission().then(resp => {
@@ -252,8 +261,10 @@
 
         function handleMotion(event) {
             const acc = event.accelerationIncludingGravity;
+            if(!acc) return;
             const total = Math.sqrt(acc.x**2 + acc.y**2 + acc.z**2);
-            if (total > 38) triggerFallCountdown(); 
+            // Llindar d'impacte fort (caiguda o xoc)
+            if (total > 40) triggerFallCountdown(); 
         }
 
         function triggerFallCountdown() {
@@ -264,16 +275,22 @@
                 timeLeft--;
                 document.getElementById('fall-timer').innerText = timeLeft;
                 if (timeLeft <= 0) {
-                    clearInterval(fallTimer); executarSOS('sms'); cancelFall();
+                    clearInterval(fallTimer); 
+                    executarSOS('sms'); 
+                    cancelFall();
                 }
             }, 1000);
         }
 
         function cancelFall() {
-            clearInterval(fallTimer); fallTimer = null;
+            clearInterval(fallTimer); 
+            fallTimer = null;
             document.getElementById('fall-overlay').classList.add('hidden');
             document.getElementById('fall-timer').innerText = "30";
         }
+
+        // Recuperar sensor si estava actiu al tancar
+        if(fallActive) toggleFallSensor();
     </script>
 </body>
 </html>

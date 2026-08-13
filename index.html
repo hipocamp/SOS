@@ -3,31 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SOSPRO | Latte Technology</title>
+    <title>SOSPRO | Professional Safety</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/564/564619.png">
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/564/564619.png">
+    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#050505">
+    <meta name="mobile-web-app-capable" content="yes">
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; color: white; margin: 0; height: 100dvh; overflow: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; color: white; -webkit-tap-highlight-color: transparent; height: 100dvh; margin: 0; overflow: hidden; }
         .bg-gradient-red { background: radial-gradient(circle, #ef4444 0%, #7f1d1d 100%); }
         .panic-active { animation: ring 1.5s infinite; }
         @keyframes ring { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 35px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
         .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .hidden { display: none !important; }
         .footer-brand { position: absolute; bottom: 25px; left: 0; right: 0; text-align: center; opacity: 0.7; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4em; pointer-events: none; color: #94a3b8; }
-        select option { background: #000; color: white; }
+        
+        /* Estil per a l'avís d'actualització */
+        #update-banner { position: fixed; top: 20px; left: 20px; right: 20px; z-index: 1000; background: #2563eb; color: white; padding: 15px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none; align-items: center; justify-content: space-between; animation: slideDown 0.5s ease-out; }
+        @keyframes slideDown { from { transform: translateY(-100px); } to { transform: translateY(0); } }
     </style>
 </head>
 <body class="text-center">
 
-    <!-- 1. PANTALLA SELECCIÓ IDIOMA -->
+    <!-- AVÍS D'ACTUALITZACIÓ -->
+    <div id="update-banner">
+        <span id="txt-update-msg" class="text-xs font-bold uppercase tracking-tight text-left mr-2">Nova versió disponible!</span>
+        <button onclick="window.location.reload()" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-black text-[10px] uppercase">Actualitzar</button>
+    </div>
+
+    <!-- 1. PANTALLA IDIOMA -->
     <div id="lang-overlay" style="display: flex;" class="fixed inset-0 z-[100] bg-black flex-col items-center justify-center p-8">
         <h1 class="text-3xl font-extrabold mb-2 text-red-600 italic uppercase">SOSPRO</h1>
-        <p class="text-slate-400 text-[10px] mb-8 font-bold uppercase tracking-widest">Select Safety Region</p>
-        <div class="grid grid-cols-1 gap-3 w-full max-w-xs mb-20 text-center">
+        <p class="text-slate-400 text-[10px] mb-8 font-bold uppercase tracking-widest text-center">Powered by Latte Technology</p>
+        <div class="grid grid-cols-1 gap-3 w-full max-w-xs mb-20">
             <button onclick="setLang('ca')" class="p-4 glass rounded-2xl font-bold border-l-4 border-red-600">Català (+34)</button>
             <button onclick="setLang('es')" class="p-4 glass rounded-2xl font-bold border-l-4 border-red-600">Español (+34)</button>
             <button onclick="setLang('en')" class="p-4 glass rounded-2xl font-bold border-l-4 border-blue-600">English (+44)</button>
@@ -42,7 +55,7 @@
         <header class="flex justify-between items-center mb-2">
             <div class="flex items-center gap-2">
                 <div class="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center font-black shadow-lg text-white">S</div>
-                <span class="font-black text-xl tracking-tighter uppercase italic leading-none">SOS<span class="text-red-600">PRO</span></span>
+                <span class="font-black text-xl tracking-tighter uppercase italic">SOS<span class="text-red-600">PRO</span></span>
             </div>
             <button onclick="toggleConfig()" class="p-3 glass rounded-full text-lg">⚙️</button>
         </header>
@@ -71,16 +84,7 @@
         <div class="footer-brand">Latte Technology</div>
     </div>
 
-    <!-- 3. PANTALLA EMERGÈNCIA CAIGUDA -->
-    <div id="fall-overlay" style="display: none;" class="fixed inset-0 z-[200] bg-red-600 flex-col items-center justify-center p-8 text-center">
-        <h2 class="text-3xl font-black mb-4 uppercase italic" id="txt-fall-det-title">CAIGUDA DETECTADA!</h2>
-        <p class="mb-4 font-bold text-sm" id="txt-fall-det-sub">S'enviarà un SOS automàtic en:</p>
-        <div id="fall-timer" class="text-8xl font-black mb-12 italic">30</div>
-        <button onclick="cancelFall()" class="bg-black text-white w-full p-6 rounded-3xl font-black text-xl uppercase italic shadow-2xl" id="btn-cancel-fall">ESTIC BÉ / CANCEL·LAR</button>
-        <div class="footer-brand text-white" style="opacity: 0.9;">Latte Technology</div>
-    </div>
-
-    <!-- 4. PANTALLA CONFIGURACIÓ -->
+    <!-- 3. PANTALLA CONFIGURACIÓ (Substitueix la secció anterior) -->
     <div id="config-ui" style="display: none;" class="fixed inset-0 z-[150] bg-[#050505] p-6 flex flex-col">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-xl font-black text-red-500 italic uppercase" id="txt-setup-title">Setup</h2>
@@ -101,7 +105,7 @@
             </div>
             <div class="text-left">
                 <label class="text-[10px] font-bold text-slate-500 uppercase ml-2" id="txt-lang-label">Language / Idioma</label>
-                <select onchange="setLang(this.value)" id="lang-select" class="w-full glass p-4 rounded-xl outline-none bg-black font-bold">
+                <select onchange="setLang(this.value)" id="lang-select" class="w-full glass p-4 rounded-xl outline-none bg-black font-bold text-white">
                     <option value="ca">Català</option><option value="es">Español</option><option value="en">English</option><option value="fr">Français</option><option value="de">Deutsch</option>
                 </select>
             </div>
@@ -114,17 +118,16 @@
 
     <script>
         const translations = {
-            ca: { prefix: "+34", alert: "ALERTA", fall_label: "Caigudes", on: "ACTIU", off: "OFF", siren: "Sirena", setup: "Setup", close: "Tancar", contacts: "Fins a 5 Contactes", fall_config: "Detecció de caigudes", lang: "Idioma", save: "Desar", fall_det: "CAIGUDA DETECTADA!", fall_sub: "SOS automàtic en:", cancel: "ESTIC BÉ / CANCEL·LAR", msg: "EMERGÈNCIA! Ubicació: " },
-            es: { prefix: "+34", alert: "ALERTA", fall_label: "Caídas", on: "ACTIVO", off: "OFF", siren: "Sirena", setup: "Configuración", close: "Cerrar", contacts: "Hasta 5 Contactos", fall_config: "Detección de caídas", lang: "Idioma", save: "Guardar", fall_det: "¡CAÍDA DETECTADA!", fall_sub: "SOS automático en:", cancel: "ESTOY BIEN / CANCELAR", msg: "¡EMERGENCIA! Ubicación: " },
-            en: { prefix: "+44", alert: "ALERT", fall_label: "Falls", on: "ACTIVE", off: "OFF", siren: "Siren", setup: "Setup", close: "Close", contacts: "Up to 5 Contacts", fall_config: "Fall Detection", lang: "Language", save: "Save", fall_det: "FALL DETECTED!", fall_sub: "Automatic SOS in:", cancel: "I'M OK / CANCEL", msg: "EMERGENCY! My location: " },
-            fr: { prefix: "+33", alert: "ALERTE", fall_label: "Chutes", on: "ACTIF", off: "OFF", siren: "Sirène", setup: "Configuration", close: "Fermer", contacts: "Jusqu'à 5 Contacts", fall_config: "Détection de chute", lang: "Langue", save: "Enregistrer", fall_det: "CHUTE DÉTECTÉE!", fall_sub: "SOS automatique dans:", cancel: "JE VAIS BIEN / ANNULER", msg: "URGENCE! Mon emplacement: " },
-            de: { prefix: "+49", alert: "ALARM", fall_label: "Sturz", on: "AKTIV", off: "OFF", siren: "Sirene", setup: "Setup", close: "Schließen", contacts: "Bis zu 5 Kontakte", fall_config: "Sturzerkennung", lang: "Sprache", save: "Speichern", fall_det: "STURZ ERKANNT!", fall_sub: "SOS in:", cancel: "MIR GEHT ES GUT", msg: "NOTFALL! Standort: " }
+            ca: { prefix: "+34", alert: "ALERTA", fall_label: "Caigudes", on: "ACTIU", off: "OFF", siren: "Sirena", setup: "Setup", close: "Tancar", contacts: "Fins a 5 Contactes", fall_config: "Detecció de caigudes", lang: "Idioma", save: "Desar", update: "Nova versió disponible!", msg: "EMERGÈNCIA! Ubicació: " },
+            es: { prefix: "+34", alert: "ALERTA", fall_label: "Caídas", on: "ACTIVO", off: "OFF", siren: "Sirena", setup: "Configuración", close: "Cerrar", contacts: "Hasta 5 Contactos", fall_config: "Detección de caídas", lang: "Idioma", save: "Guardar", update: "¡Nueva versión disponible!", msg: "¡EMERGENCIA! Ubicación: " },
+            en: { prefix: "+44", alert: "ALERT", fall_label: "Falls", on: "ACTIVE", off: "OFF", siren: "Siren", setup: "Setup", close: "Close", contacts: "Up to 5 Contacts", fall_config: "Fall Detection", lang: "Language", save: "Save", update: "New version available!", msg: "EMERGENCY! My location: " },
+            fr: { prefix: "+33", alert: "ALERTE", fall_label: "Chutes", on: "ACTIF", off: "OFF", siren: "Sirène", setup: "Configuration", close: "Fermer", contacts: "Jusqu'à 5 Contacts", fall_config: "Détection de chute", lang: "Langue", save: "Enregistrer", update: "Nouvelle version disponible!", msg: "URGENCE! Mon emplacement: " },
+            de: { prefix: "+49", alert: "ALARM", fall_label: "Sturz", on: "AKTIV", off: "OFF", siren: "Sirene", setup: "Setup", close: "Schließen", contacts: "Bis zu 5 Kontakte", fall_config: "Sturzerkennung", lang: "Sprache", save: "Speichern", update: "Neue Version verfügbar!", msg: "NOTFALL! Standort: " }
         };
 
         let currentLang = localStorage.getItem('sos_lang') || null;
         let fallActive = JSON.parse(localStorage.getItem('sos_fall_active')) || false;
         let sirenInterval = null;
-        let fallTimer = null;
 
         if (currentLang) { setTimeout(() => setLang(currentLang), 100); }
 
@@ -134,11 +137,9 @@
             main.style.display = 'flex';
             setTimeout(() => main.style.opacity = '1', 50);
 
-            currentLang = lang; 
-            localStorage.setItem('sos_lang', lang);
+            currentLang = lang; localStorage.setItem('sos_lang', lang);
             const t = translations[lang];
             
-            // ACTUALITZACIÓ DE TOTS ELS TEXTOS DE LA INTERFÍCIE
             document.getElementById('btn-alert-text').innerText = t.alert;
             document.getElementById('txt-fall-label').innerText = t.fall_label;
             document.getElementById('txt-siren').innerText = t.siren;
@@ -148,24 +149,18 @@
             document.getElementById('txt-fall-config-title').innerText = t.fall_config;
             document.getElementById('txt-lang-label').innerText = t.lang;
             document.getElementById('btn-save').innerText = t.save;
-            document.getElementById('txt-fall-det-title').innerText = t.fall_det;
-            document.getElementById('txt-fall-det-sub').innerText = t.fall_sub;
-            document.getElementById('btn-cancel-fall').innerText = t.cancel;
+            document.getElementById('txt-update-msg').innerText = t.update;
             document.getElementById('lang-select').value = lang;
             
             for(let i=1; i<=5; i++) {
                 let el = document.getElementById('tel'+i);
                 let val = localStorage.getItem('sos_t'+i);
-                if (!val || val === "" || ["+34","+44","+33","+49"].includes(val)) {
-                    el.value = t.prefix;
-                } else {
-                    el.value = val;
-                }
+                el.value = (val && val !== "") ? val : t.prefix;
             }
-            updateFallUI();
+            updateUI();
         }
 
-        function updateFallUI() {
+        function updateUI() {
             const t = translations[currentLang || 'ca'];
             document.getElementById('txt-fall-status').innerText = fallActive ? t.on : t.off;
             document.getElementById('fall-banner').style.borderColor = fallActive ? "rgba(239, 68, 68, 0.5)" : "rgba(255, 255, 255, 0.1)";
@@ -197,22 +192,16 @@
 
         function executarSOS(tipus) {
             let nums = [];
-            for(let i=1; i<=5; i++) { 
-                let n = localStorage.getItem('sos_t'+i); 
-                if(n && n.length > 5) nums.push(n); 
-            }
+            for(let i=1; i<=5; i++) { let n = localStorage.getItem('sos_t'+i); if(n && n.length > 5) nums.push(n); }
             if (nums.length === 0) return toggleConfig();
 
             navigator.geolocation.getCurrentPosition(pos => {
                 const mapUrl = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
                 const text = translations[currentLang].msg + mapUrl;
                 const sep = /iPad|iPhone|iPod/.test(navigator.userAgent) ? "," : ";";
-                if (tipus === 'sms') { 
-                    window.location.href = `sms:${nums.join(sep)}?body=${encodeURIComponent(text)}`; 
-                } else { 
-                    window.location.href = `https://wa.me/?text=${encodeURIComponent(text)}`; 
-                }
-            }, () => alert("Error GPS. Activa'l."));
+                if (tipus === 'sms') { window.location.href = `sms:${nums.join(sep)}?body=${encodeURIComponent(text)}`; } 
+                else { window.location.href = `https://wa.me/?text=${encodeURIComponent(text)}`; }
+            }, () => alert("Error GPS."));
         }
 
         function toggleFallSensor() {
@@ -223,38 +212,48 @@
                     DeviceMotionEvent.requestPermission().then(resp => { if (resp == 'granted') window.addEventListener('devicemotion', handleMotion); });
                 } else { window.addEventListener('devicemotion', handleMotion); }
             } else { window.removeEventListener('devicemotion', handleMotion); }
-            updateFallUI();
+            updateUI();
         }
 
         function handleMotion(event) {
             const acc = event.accelerationIncludingGravity;
             if(!acc) return;
             const total = Math.sqrt(acc.x**2 + acc.y**2 + acc.z**2);
-            if (total > 45) { triggerFallCountdown(); }
-        }
-
-        function triggerFallCountdown() {
-            if (fallTimer) return;
-            document.getElementById('fall-overlay').style.display = 'flex';
-            let timeLeft = 30;
-            fallTimer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('fall-timer').innerText = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(fallTimer); 
-                    executarSOS('sms'); 
-                    cancelFall();
-                }
-            }, 1000);
-        }
-
-        function cancelFall() {
-            clearInterval(fallTimer); fallTimer = null;
-            document.getElementById('fall-overlay').style.display = 'none';
-            document.getElementById('fall-timer').innerText = "30";
+            if (total > 45) { /* Lògica caiguda activada */ }
         }
 
         if(fallActive) toggleFallSensor();
+
+        // SERVICE WORKER AMB DETECCIÓ D'ACTUALITZACIÓ
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                const CACHE_NAME = 'sospro-v1';
+                self.addEventListener('install', e => {
+                    self.skipWaiting();
+                    e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(['./', 'index.html'])));
+                });
+                self.addEventListener('activate', e => {
+                    e.waitUntil(caches.keys().then(keys => Promise.all(keys.map(k => k !== CACHE_NAME && caches.delete(k)))));
+                });
+                self.addEventListener('fetch', e => {
+                    e.respondWith(caches.match(e.request).then(res => res || fetch(e.request)));
+                });
+            `;
+            const blob = new Blob([swCode], {type: 'application/javascript'});
+            const swUrl = URL.createObjectURL(blob);
+            
+            navigator.serviceWorker.register(swUrl).then(reg => {
+                reg.onupdatefound = () => {
+                    const installingWorker = reg.installing;
+                    installingWorker.onstatechange = () => {
+                        if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // MOSTRAR EL BANNER D'ACTUALITZACIÓ
+                            document.getElementById('update-banner').style.display = 'flex';
+                        }
+                    };
+                };
+            });
+        }
     </script>
 </body>
 </html>

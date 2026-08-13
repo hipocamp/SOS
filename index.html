@@ -3,66 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SOSPRO | Latte Technology</title>
+    <title>SOSPRO | Offline Ready</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/564/564619.png">
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/564/564619.png">
+    
+    <!-- AQUESTES LÍNIES PERMETEN QUE L'APP FUNCIONI SENSE INTERNET UNA VEGADA INSTAL·LADA -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#050505">
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        
-        :root { --app-height: 100vh; }
-        
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #050505; 
-            color: white; 
-            -webkit-tap-highlight-color: transparent;
-            height: 100dvh; /* Alçada dinàmica per a mòbils */
-            margin: 0;
-            overflow: hidden;
-        }
-
-        #main-app, #lang-overlay, #config-ui, #fall-overlay {
-            height: 100dvh;
-            width: 100%;
-        }
-
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; color: white; -webkit-tap-highlight-color: transparent; height: 100dvh; margin: 0; overflow: hidden; }
+        #main-app, #lang-overlay, #config-ui, #fall-overlay { height: 100dvh; width: 100%; position: relative; }
         .bg-gradient-red { background: radial-gradient(circle, #ef4444 0%, #7f1d1d 100%); }
-        
         .panic-active { animation: ring 1.5s infinite; }
-        @keyframes ring {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { box-shadow: 0 0 0 40px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-
+        @keyframes ring { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 40px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
         .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .hidden { display: none !important; }
-
-        /* Marca Latte Technology optimitzada per a mòbil */
-        .footer-brand { 
-            position: absolute; 
-            bottom: 30px; /* Pujat una mica més */
-            left: 0; 
-            right: 0; 
-            text-align: center; 
-            opacity: 0.6; /* Més visible */
-            font-size: 10px; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            letter-spacing: 0.3em; 
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        /* Ajust de botó SOS per a pantalles petites */
-        @media (max-height: 700px) {
-            #main-sos-btn { width: 180px; height: 180px; }
-            #main-sos-btn span:first-child { font-size: 3rem; }
-        }
+        .footer-brand { position: absolute; bottom: 30px; left: 0; right: 0; text-align: center; opacity: 0.6; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3em; pointer-events: none; z-index: 10; }
+        @media (max-height: 700px) { #main-sos-btn { width: 180px; height: 180px; } }
     </style>
 </head>
 <body class="text-center">
@@ -70,8 +32,8 @@
     <!-- 1. SELECCIÓ IDIOMA -->
     <div id="lang-overlay" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center p-8 transition-all duration-500">
         <h1 class="text-3xl font-extrabold mb-2 tracking-tighter uppercase italic text-red-600">SOSPRO</h1>
-        <p class="text-slate-400 text-[10px] mb-8 font-bold uppercase tracking-widest">Select Safety Region</p>
-        <div class="grid grid-cols-1 gap-3 w-full max-w-xs mb-20">
+        <p class="text-slate-400 text-[10px] mb-8 font-bold uppercase tracking-widest">Powered by Latte Technology</p>
+        <div class="grid grid-cols-1 gap-3 w-full max-w-xs mb-20 text-center">
             <button onclick="setLang('ca')" class="p-4 glass rounded-2xl font-bold border-l-4 border-red-600">Català (+34)</button>
             <button onclick="setLang('es')" class="p-4 glass rounded-2xl font-bold border-l-4 border-red-600">Español (+34)</button>
             <button onclick="setLang('en')" class="p-4 glass rounded-2xl font-bold border-l-4 border-blue-600">English (+44)</button>
@@ -96,21 +58,20 @@
         </div>
 
         <div class="flex-grow flex items-center justify-center relative">
-            <div class="absolute w-64 h-64 border border-white/5 rounded-full animate-ping opacity-10"></div>
-            <button id="main-sos-btn" onclick="executarSOS('whatsapp')" class="bg-gradient-red w-56 h-56 rounded-full flex flex-col items-center justify-center panic-active border-8 border-white/5 relative z-10 active:scale-95 transition-transform">
+            <button id="main-sos-btn" onclick="executarSOS('sms')" class="bg-gradient-red w-56 h-56 rounded-full flex flex-col items-center justify-center panic-active border-8 border-white/5 relative z-10 active:scale-95 transition-transform">
                 <span class="text-5xl mb-2">🚨</span>
                 <span class="font-black text-xl tracking-widest uppercase italic" id="btn-alert-text">ALERTA</span>
             </button>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 mt-6 mb-20">
+        <div class="grid grid-cols-2 gap-4 mt-6 mb-20 text-center">
             <button onclick="triggerSiren()" id="siren-btn" class="glass p-5 rounded-[2rem] flex flex-col items-center gap-2 transition-all">
                 <span class="text-2xl">🔊</span>
                 <span class="text-[10px] font-bold uppercase tracking-widest" id="txt-siren">Sirena</span>
             </button>
-            <button onclick="executarSOS('sms')" class="glass p-5 rounded-[2rem] flex flex-col items-center gap-2 transition-all">
-                <span class="text-2xl">📩</span>
-                <span class="text-[10px] font-bold uppercase tracking-widest" id="txt-sms">Direct SMS</span>
+            <button onclick="executarSOS('whatsapp')" class="glass p-5 rounded-[2rem] flex flex-col items-center gap-2 transition-all">
+                <span class="text-2xl font-bold">W</span>
+                <span class="text-[10px] font-bold uppercase tracking-widest">WhatsApp</span>
             </button>
         </div>
         <div class="footer-brand">Latte Technology</div>
@@ -126,7 +87,7 @@
     </div>
 
     <!-- 4. PANTALLA CONFIGURACIÓ -->
-    <div id="config-ui" class="hidden fixed inset-0 z-[150] bg-[#050505] p-6 flex flex-col overflow-hidden">
+    <div id="config-ui" class="hidden fixed inset-0 z-[150] bg-[#050505] p-6 flex flex-col">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-xl font-black text-red-500 italic uppercase">Setup SOSPRO</h2>
             <button onclick="toggleConfig()" class="text-slate-500 text-xs font-bold uppercase tracking-widest">Tancar</button>
@@ -134,30 +95,23 @@
         
         <div class="space-y-4 flex-grow overflow-y-auto pb-32">
             <div class="space-y-2 text-left">
-                <label class="text-[10px] font-bold text-slate-500 uppercase ml-2">Contactes d'emergència</label>
-                <input type="tel" id="tel1" class="w-full glass p-3 rounded-xl outline-none focus:border-red-500 text-sm font-mono">
-                <input type="tel" id="tel2" class="w-full glass p-3 rounded-xl outline-none focus:border-red-500 text-sm font-mono">
-                <input type="tel" id="tel3" class="w-full glass p-3 rounded-xl outline-none focus:border-red-500 text-sm font-mono">
-                <input type="tel" id="tel4" class="w-full glass p-3 rounded-xl outline-none focus:border-red-500 text-sm font-mono">
-                <input type="tel" id="tel5" class="w-full glass p-3 rounded-xl outline-none focus:border-red-500 text-sm font-mono">
+                <label class="text-[10px] font-bold text-slate-500 uppercase ml-2">5 Contactes (+34...)</label>
+                <input type="tel" id="tel1" class="w-full glass p-3 rounded-xl outline-none focus:border-red-500 text-sm font-mono tracking-wider">
+                <input type="tel" id="tel2" class="w-full glass p-3 rounded-xl outline-none focus:border-red-500 text-sm font-mono tracking-wider">
+                <input type="tel" id="tel3" class="w-full glass p-3 rounded-xl outline-none focus:border-red-500 text-sm font-mono tracking-wider">
+                <input type="tel" id="tel4" class="w-full glass p-3 rounded-xl outline-none focus:border-red-500 text-sm font-mono tracking-wider">
+                <input type="tel" id="tel5" class="w-full glass p-3 rounded-xl outline-none focus:border-red-500 text-sm font-mono tracking-wider">
             </div>
 
             <div class="glass p-4 rounded-2xl flex items-center justify-between text-left">
-                <div>
-                    <p class="font-bold text-sm" id="txt-label-fall">Detecció de caigudes</p>
-                    <p class="text-[9px] text-slate-400 uppercase tracking-widest" id="txt-fall-desc">Accelerometer sensor</p>
-                </div>
+                <div><p class="font-bold text-sm" id="txt-label-fall">Detecció de caigudes</p><p class="text-[9px] text-slate-400 uppercase tracking-widest">Accelerometer sensor</p></div>
                 <input type="checkbox" id="fall-toggle" onchange="toggleFallSensor()" class="w-6 h-6 accent-red-500">
             </div>
 
             <div class="text-left">
-                <label class="text-[10px] font-bold text-slate-500 uppercase ml-2">Language / Idioma</label>
+                <label class="text-[10px] font-bold text-slate-500 uppercase ml-2">Region / Idioma</label>
                 <select onchange="setLang(this.value)" id="lang-select" class="w-full glass p-4 rounded-xl outline-none bg-black font-bold">
-                    <option value="ca">Català</option>
-                    <option value="es">Español</option>
-                    <option value="en">English</option>
-                    <option value="fr">Français</option>
-                    <option value="de">Deutsch</option>
+                    <option value="ca">Català</option><option value="es">Español</option><option value="en">English</option><option value="fr">Français</option><option value="de">Deutsch</option>
                 </select>
             </div>
         </div>
@@ -170,11 +124,11 @@
 
     <script>
         const translations = {
-            ca: { prefix: "+34", title: "ALERTA", fall_status: "Caigudes: ", on: "ACTIU", off: "OFF", siren: "Sirena", sms: "SMS Direct", fall_det: "CAIGUDA DETECTADA!", fall_sub: "SOS automàtic en:", cancel: "ESTIGUEU BÉ / CANCEL·LAR", label_contacts: "Fins a 5 Contactes", label_fall: "Detecció de caigudes", fall_desc: "Basat en acceleròmetre", save: "Desar", msg: "EMERGÈNCIA! Ubicació: " },
-            es: { prefix: "+34", title: "ALERTA", fall_status: "Caídas: ", on: "ACTIVO", off: "OFF", siren: "Sirena", sms: "SMS Directo", fall_det: "¡CAÍDA DETECTADA!", fall_sub: "SOS automático en:", cancel: "ESTOY BIEN / CANCELAR", label_contacts: "Hasta 5 Contactos", label_fall: "Detección de caídas", fall_desc: "Basado en acelerómetro", save: "Guardar", msg: "¡EMERGENCIA! Ubicación: " },
-            en: { prefix: "+44", title: "ALERT", fall_status: "Falls: ", on: "ACTIVE", off: "OFF", siren: "Siren", sms: "Direct SMS", fall_det: "FALL DETECTED!", fall_sub: "Automatic SOS in:", cancel: "I'M OK / CANCEL", label_contacts: "Up to 5 Contacts", label_fall: "Fall Detection", fall_desc: "Accelerometer based", save: "Save", msg: "EMERGENCY! My location: " },
-            fr: { prefix: "+33", title: "ALERTE", fall_status: "Chutes: ", on: "ACTIF", off: "OFF", siren: "Sirène", sms: "SMS Direct", fall_det: "CHUTE DÉTECTÉE!", fall_sub: "SOS automatique dans:", cancel: "JE VAIS BIEN / ANNULER", label_contacts: "Jusqu'à 5 Contacts", label_fall: "Détection de chute", fall_desc: "Via accéléromètre", save: "Enregistrer", msg: "URGENCE! Mon emplacement: " },
-            de: { prefix: "+49", title: "ALARM", fall_status: "Sturz: ", on: "AKTIV", off: "OFF", siren: "Sirene", sms: "Direkt SMS", fall_det: "STURZ ERKANNT!", fall_sub: "Automatischer SOS in:", cancel: "MIR GEHT ES GUT", label_contacts: "Bis zu 5 Kontakte", label_fall: "Sturzerkennung", fall_desc: "Beschleunigungsmesser", save: "Speichern", msg: "NOTFALL! Standort: " }
+            ca: { prefix: "+34", title: "SOS SMS", fall_status: "Caigudes: ", on: "ACTIU", off: "OFF", siren: "Sirena", sms: "SMS Direct", fall_det: "CAIGUDA DETECTADA!", fall_sub: "SOS automàtic en:", cancel: "ESTIGUEU BÉ / CANCEL·LAR", label_contacts: "Fins a 5 Contactes", label_fall: "Detecció de caigudes", fall_desc: "Basat en acceleròmetre", save: "Desar", msg: "EMERGÈNCIA! Ubicació: " },
+            es: { prefix: "+34", title: "SOS SMS", fall_status: "Caídas: ", on: "ACTIVO", off: "OFF", siren: "Sirena", sms: "SMS Directo", fall_det: "¡CAÍDA DETECTADA!", fall_sub: "SOS automático en:", cancel: "ESTOY BIEN / CANCELAR", label_contacts: "Hasta 5 Contactos", label_fall: "Detección de caídas", fall_desc: "Basado en acelerómetro", save: "Guardar", msg: "¡EMERGENCIA! Ubicación: " },
+            en: { prefix: "+44", title: "SOS SMS", fall_status: "Falls: ", on: "ACTIVE", off: "OFF", siren: "Siren", sms: "Direct SMS", fall_det: "FALL DETECTED!", fall_sub: "Automatic SOS in:", cancel: "I'M OK / CANCEL", label_contacts: "Up to 5 Contacts", label_fall: "Fall Detection", fall_desc: "Accelerometer based", save: "Save", msg: "EMERGENCY! My location: " },
+            fr: { prefix: "+33", title: "SOS SMS", fall_status: "Chutes: ", on: "ACTIF", off: "OFF", siren: "Sirène", sms: "SMS Direct", fall_det: "CHUTE DÉTECTÉE!", fall_sub: "SOS automatique dans:", cancel: "JE VAIS BIEN / ANNULER", label_contacts: "Jusqu'à 5 Contacts", label_fall: "Détection de chute", fall_desc: "Via accéléromètre", save: "Enregistrer", msg: "URGENCE! Mon emplacement: " },
+            de: { prefix: "+49", title: "SOS SMS", fall_status: "Sturz: ", on: "AKTIV", off: "OFF", siren: "Sirene", sms: "Direkt SMS", fall_det: "STURZ ERKANNT!", fall_sub: "Automatischer SOS in:", cancel: "MIR GEHT ES GUT", label_contacts: "Bis zu 5 Kontakte", label_fall: "Sturzerkennung", fall_desc: "Beschleunigungsmesser", save: "Speichern", msg: "NOTFALL! Standort: " }
         };
 
         let currentLang = localStorage.getItem('sos_lang') || null;
@@ -182,36 +136,25 @@
         let sirenInterval = null;
         let fallTimer = null;
 
-        if (currentLang) {
-            setLang(currentLang);
-            document.getElementById('lang-overlay').classList.add('hidden');
-        }
+        if (currentLang) { setLang(currentLang); document.getElementById('lang-overlay').classList.add('hidden'); }
 
         function setLang(lang) {
-            currentLang = lang;
-            localStorage.setItem('sos_lang', lang);
+            currentLang = lang; localStorage.setItem('sos_lang', lang);
             const t = translations[lang];
-            
             document.getElementById('btn-alert-text').innerText = t.title;
             document.getElementById('txt-siren').innerText = t.siren;
             document.getElementById('txt-sms').innerText = t.sms;
             document.getElementById('txt-fall-detected').innerText = t.fall_det;
             document.getElementById('txt-fall-sub').innerText = t.fall_sub;
             document.getElementById('txt-label-fall').innerText = t.label_fall;
-            document.getElementById('txt-fall-desc').innerText = t.fall_desc;
             document.getElementById('btn-save').innerText = t.save;
             document.getElementById('lang-select').value = lang;
             
             for(let i=1; i<=5; i++) {
                 let el = document.getElementById('tel'+i);
                 let savedValue = localStorage.getItem('sos_t'+i);
-                if (!savedValue || savedValue === "" || ["+34","+44","+33","+49"].includes(savedValue)) {
-                    el.value = t.prefix;
-                } else {
-                    el.value = savedValue;
-                }
+                if (!savedValue || savedValue === "" || ["+34","+44","+33","+49"].includes(savedValue)) { el.value = t.prefix; } else { el.value = savedValue; }
             }
-            
             updateFallStatusUI();
             document.getElementById('lang-overlay').classList.add('hidden');
             document.getElementById('main-app').classList.remove('opacity-0');
@@ -224,29 +167,20 @@
             document.getElementById('fall-toggle').checked = fallActive;
         }
 
-        function toggleConfig() { 
-            document.getElementById('config-ui').classList.toggle('hidden'); 
-        }
+        function toggleConfig() { document.getElementById('config-ui').classList.toggle('hidden'); }
 
         function guardarConfig() {
-            for(let i=1; i<=5; i++) {
-                localStorage.setItem('sos_t'+i, document.getElementById('tel'+i).value);
-            }
+            for(let i=1; i<=5; i++) { localStorage.setItem('sos_t'+i, document.getElementById('tel'+i).value); }
             toggleConfig();
         }
 
         function triggerSiren() {
             const btn = document.getElementById('siren-btn');
-            if (sirenInterval) {
-                clearInterval(sirenInterval); sirenInterval = null;
-                btn.style.background = ""; return;
-            }
+            if (sirenInterval) { clearInterval(sirenInterval); sirenInterval = null; btn.style.background = ""; return; }
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             sirenInterval = setInterval(() => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(Math.random() * 800 + 1000, audioCtx.currentTime);
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(Math.random() * 800 + 1000, audioCtx.currentTime);
                 osc.connect(gain); gain.connect(audioCtx.destination);
                 osc.start(); osc.stop(audioCtx.currentTime + 0.1);
                 btn.style.background = (btn.style.background === "") ? "rgba(239, 68, 68, 0.5)" : "";
@@ -255,10 +189,7 @@
 
         function executarSOS(tipus) {
             let nums = [];
-            for(let i=1; i<=5; i++) {
-                let n = localStorage.getItem('sos_t'+i);
-                if(n && n.length > 5) nums.push(n);
-            }
+            for(let i=1; i<=5; i++) { let n = localStorage.getItem('sos_t'+i); if(n && n.length > 5) nums.push(n); }
             if (nums.length === 0) return toggleConfig();
 
             navigator.geolocation.getCurrentPosition(pos => {
@@ -270,7 +201,7 @@
                 } else {
                     window.location.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
                 }
-            }, () => { alert("Error GPS."); });
+            }, () => { alert("Error GPS. Activa'l a la configuració del mòbil."); });
         }
 
         function toggleFallSensor() {
@@ -278,15 +209,9 @@
             localStorage.setItem('sos_fall_active', fallActive);
             if (fallActive) {
                 if (typeof DeviceMotionEvent.requestPermission === 'function') {
-                    DeviceMotionEvent.requestPermission().then(resp => {
-                        if (resp == 'granted') window.addEventListener('devicemotion', handleMotion);
-                    });
-                } else {
-                    window.addEventListener('devicemotion', handleMotion);
-                }
-            } else {
-                window.removeEventListener('devicemotion', handleMotion);
-            }
+                    DeviceMotionEvent.requestPermission().then(resp => { if (resp == 'granted') window.addEventListener('devicemotion', handleMotion); });
+                } else { window.addEventListener('devicemotion', handleMotion); }
+            } else { window.removeEventListener('devicemotion', handleMotion); }
             updateFallStatusUI();
         }
 
@@ -302,22 +227,12 @@
             document.getElementById('fall-overlay').classList.remove('hidden');
             let timeLeft = 30;
             fallTimer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('fall-timer').innerText = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(fallTimer); 
-                    executarSOS('sms'); 
-                    cancelFall();
-                }
+                timeLeft--; document.getElementById('fall-timer').innerText = timeLeft;
+                if (timeLeft <= 0) { clearInterval(fallTimer); executarSOS('sms'); cancelFall(); }
             }, 1000);
         }
 
-        function cancelFall() {
-            clearInterval(fallTimer); 
-            fallTimer = null;
-            document.getElementById('fall-overlay').classList.add('hidden');
-            document.getElementById('fall-timer').innerText = "30";
-        }
+        function cancelFall() { clearInterval(fallTimer); fallTimer = null; document.getElementById('fall-overlay').classList.add('hidden'); document.getElementById('fall-timer').innerText = "30"; }
 
         if(fallActive) toggleFallSensor();
     </script>

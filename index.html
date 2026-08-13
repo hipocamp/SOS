@@ -22,27 +22,27 @@
         }
         .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .hidden { display: none !important; }
-        select option { background: #111; color: white; }
+        .footer-brand { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; opacity: 0.4; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4em; pointer-events: none; }
     </style>
 </head>
 <body class="overflow-hidden text-center">
 
-    <!-- SELECCIÓ IDIOMA INICIAL -->
+    <!-- 1. PANTALLA SELECCIÓ IDIOMA -->
     <div id="lang-overlay" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center p-8 transition-all duration-500">
         <h1 class="text-3xl font-extrabold mb-2 tracking-tighter uppercase italic text-red-600">SOSPRO</h1>
-        <p class="text-slate-400 text-[10px] mb-10 font-bold uppercase tracking-widest text-center">Powered by Latte Technology</p>
+        <p class="text-slate-400 text-[10px] mb-10 font-bold uppercase tracking-widest">Select Safety Region</p>
         <div class="grid grid-cols-1 gap-3 w-full max-w-xs">
-            <button onclick="setLang('ca')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all border-l-4 border-red-600 text-center">Català (+34)</button>
-            <button onclick="setLang('es')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all border-l-4 border-red-600 text-center">Español (+34)</button>
-            <button onclick="setLang('en')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all border-l-4 border-blue-600 text-center">English (+44)</button>
-            <button onclick="setLang('fr')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all border-l-4 border-blue-200 text-center">Français (+33)</button>
-            <button onclick="setLang('de')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all border-l-4 border-yellow-600 text-center">Deutsch (+49)</button>
+            <button onclick="setLang('ca')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all border-l-4 border-red-600">Català (+34)</button>
+            <button onclick="setLang('es')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all border-l-4 border-red-600">Español (+34)</button>
+            <button onclick="setLang('en')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all border-l-4 border-blue-600">English (+44)</button>
+            <button onclick="setLang('fr')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all border-l-4 border-blue-200">Français (+33)</button>
+            <button onclick="setLang('de')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all border-l-4 border-yellow-600">Deutsch (+49)</button>
         </div>
+        <div class="footer-brand">Latte Technology</div>
     </div>
 
-    <!-- MAIN APP -->
-    <div id="main-app" class="h-screen flex flex-col p-6 opacity-0 transition-opacity duration-1000">
-        
+    <!-- 2. PANTALLA PRINCIPAL -->
+    <div id="main-app" class="h-screen flex flex-col p-6 opacity-0 transition-opacity duration-1000 relative">
         <header class="flex justify-between items-center mb-6">
             <div class="flex items-center gap-2">
                 <div class="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center font-black shadow-lg">S</div>
@@ -51,12 +51,10 @@
             <button onclick="toggleConfig()" class="p-3 glass rounded-full active:scale-90 transition-transform">⚙️</button>
         </header>
 
-        <!-- Estatus sensor -->
         <div id="fall-status-banner" class="glass rounded-2xl p-3 text-center mb-6 border-red-500/30">
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest" id="txt-fall-status">CAIGUDES: OFF</p>
         </div>
 
-        <!-- Botó central -->
         <div class="flex-grow flex items-center justify-center relative">
             <div class="absolute w-72 h-72 border border-white/5 rounded-full animate-ping opacity-20"></div>
             <button id="main-sos-btn" onclick="executarSOS('whatsapp')" class="bg-gradient-red w-64 h-64 rounded-full flex flex-col items-center justify-center panic-active border-8 border-white/5 relative z-10 active:scale-95 transition-transform">
@@ -65,8 +63,7 @@
             </button>
         </div>
 
-        <!-- Eines -->
-        <div class="grid grid-cols-2 gap-4 mt-8">
+        <div class="grid grid-cols-2 gap-4 mt-8 mb-16">
             <button onclick="triggerSiren()" id="siren-btn" class="glass p-5 rounded-[2rem] flex flex-col items-center gap-2 transition-all">
                 <span class="text-2xl">🔊</span>
                 <span class="text-[10px] font-bold uppercase tracking-widest" id="txt-siren">Sirena</span>
@@ -76,28 +73,26 @@
                 <span class="text-[10px] font-bold uppercase tracking-widest" id="txt-sms">Direct SMS</span>
             </button>
         </div>
-
-        <footer class="mt-8 text-center opacity-20">
-            <p class="text-[9px] font-bold tracking-[0.5em] uppercase italic">Latte Technology Shield</p>
-        </footer>
+        <div class="footer-brand">Latte Technology</div>
     </div>
 
-    <!-- PANTALLA EMERGÈNCIA CAIGUDA -->
+    <!-- 3. PANTALLA EMERGÈNCIA CAIGUDA -->
     <div id="fall-overlay" class="hidden fixed inset-0 z-[200] bg-red-600 flex flex-col items-center justify-center p-8 text-center">
         <h2 class="text-3xl font-black mb-4 uppercase italic" id="txt-fall-detected">CAIGUDA DETECTADA!</h2>
         <p class="mb-8 font-bold" id="txt-fall-sub">S'enviarà un SOS automàtic en:</p>
         <div id="fall-timer" class="text-9xl font-black mb-12 italic">30</div>
         <button onclick="cancelFall()" class="bg-black text-white w-full p-6 rounded-3xl font-black text-xl uppercase italic shadow-2xl active:scale-95">ESTIC BÉ / CANCEL·LAR</button>
+        <div class="footer-brand" style="color: white; opacity: 0.6;">Latte Technology</div>
     </div>
 
-    <!-- CONFIGURACIÓ -->
+    <!-- 4. PANTALLA CONFIGURACIÓ -->
     <div id="config-ui" class="hidden fixed inset-0 z-[150] bg-[#050505] p-6 flex flex-col overflow-y-auto">
         <div class="flex justify-between items-center mb-8">
             <h2 class="text-xl font-black text-red-500 italic uppercase">Setup SOSPRO</h2>
             <button onclick="toggleConfig()" class="text-slate-500 text-xs font-bold uppercase tracking-widest">Tancar</button>
         </div>
         
-        <div class="space-y-6 flex-grow pb-10">
+        <div class="space-y-6 flex-grow pb-24">
             <div class="space-y-3 text-left">
                 <label class="text-[10px] font-bold text-slate-500 uppercase ml-2" id="txt-label-contacts">Fins a 5 Contactes</label>
                 <input type="tel" id="tel1" class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500 transition-colors text-sm font-mono tracking-wider">
@@ -107,8 +102,8 @@
                 <input type="tel" id="tel5" class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500 transition-colors text-sm font-mono tracking-wider">
             </div>
 
-            <div class="glass p-5 rounded-3xl flex items-center justify-between">
-                <div class="text-left">
+            <div class="glass p-5 rounded-3xl flex items-center justify-between text-left">
+                <div>
                     <p class="font-bold text-sm" id="txt-label-fall">Detecció de caigudes</p>
                     <p class="text-[9px] text-slate-400 uppercase tracking-widest" id="txt-fall-desc">Accelerometer sensor</p>
                 </div>
@@ -127,7 +122,10 @@
             </div>
         </div>
 
-        <button onclick="guardarConfig()" class="w-full bg-red-600 p-5 rounded-3xl font-black uppercase tracking-widest shadow-xl mt-6 italic active:bg-red-700" id="btn-save">Desar</button>
+        <div class="fixed bottom-0 left-0 right-0 p-6 bg-[#050505] flex flex-col items-center">
+            <button onclick="guardarConfig()" class="w-full max-w-md bg-red-600 p-5 rounded-3xl font-black uppercase tracking-widest shadow-xl italic active:bg-red-700" id="btn-save">Desar</button>
+            <div class="footer-brand mt-4 relative bottom-0">Latte Technology</div>
+        </div>
     </div>
 
     <script>
@@ -168,7 +166,7 @@
             for(let i=1; i<=5; i++) {
                 let el = document.getElementById('tel'+i);
                 let savedValue = localStorage.getItem('sos_t'+i);
-                if (!savedValue || savedValue === "" || savedValue === "+34" || savedValue === "+44" || savedValue === "+33" || savedValue === "+49") {
+                if (!savedValue || savedValue === "" || ["+34","+44","+33","+49"].includes(savedValue)) {
                     el.value = t.prefix;
                 } else {
                     el.value = savedValue;
@@ -233,7 +231,7 @@
                 } else {
                     window.location.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
                 }
-            }, () => { alert("GPS error."); });
+            }, () => { alert("Error GPS."); });
         }
 
         function toggleFallSensor() {
@@ -257,7 +255,7 @@
             const acc = event.accelerationIncludingGravity;
             if(!acc) return;
             const total = Math.sqrt(acc.x**2 + acc.y**2 + acc.z**2);
-            if (total > 40) triggerFallCountdown(); 
+            if (total > 42) triggerFallCountdown(); 
         }
 
         function triggerFallCountdown() {

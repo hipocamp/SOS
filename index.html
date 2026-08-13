@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GUARDIAN SOS | Premium Safety</title>
+    <title>SOSPRO | Premium Safety</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icona de la App (Sirena) -->
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/564/564619.png">
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/564/564619.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -26,91 +27,92 @@
 </head>
 <body class="overflow-hidden">
 
-    <!-- PANTALLA SELECCIÓ IDIOMA (S'obre només la primera vegada) -->
+    <!-- SELECCIÓ IDIOMA -->
     <div id="lang-overlay" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center p-8 transition-all duration-500">
-        <h1 class="text-2xl font-extrabold mb-8 tracking-tighter">SELECT LANGUAGE</h1>
+        <h1 class="text-2xl font-extrabold mb-8 tracking-tighter uppercase italic text-red-600">SOSPRO</h1>
+        <p class="text-slate-400 text-xs mb-6 font-bold uppercase tracking-widest text-center">Select your language</p>
         <div class="grid grid-cols-1 gap-3 w-full max-w-xs">
-            <button onclick="setLang('ca')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10">Català</button>
-            <button onclick="setLang('es')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10">Español</button>
-            <button onclick="setLang('en')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10">English</button>
-            <button onclick="setLang('fr')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10">Français</button>
-            <button onclick="setLang('de')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10">Deutsch</button>
+            <button onclick="setLang('ca')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all">Català</button>
+            <button onclick="setLang('es')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all">Español</button>
+            <button onclick="setLang('en')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all">English</button>
+            <button onclick="setLang('fr')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all">Français</button>
+            <button onclick="setLang('de')" class="p-4 glass rounded-2xl font-bold hover:bg-white/10 transition-all">Deutsch</button>
         </div>
     </div>
 
-    <!-- PANTALLA PRINCIPAL -->
+    <!-- MAIN APP -->
     <div id="main-app" class="h-screen flex flex-col p-6 opacity-0 transition-opacity duration-1000">
         
         <!-- Header -->
-        <header class="flex justify-between items-center mb-8">
+        <header class="flex justify-between items-center mb-6">
             <div class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center font-black">G</div>
-                <span class="font-black text-xl tracking-tighter uppercase italic">Guardian<span class="text-red-600">PRO</span></span>
+                <div class="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center font-black shadow-lg shadow-red-900/20">S</div>
+                <span class="font-black text-xl tracking-tighter uppercase italic">SOS<span class="text-red-600">PRO</span></span>
             </div>
-            <button onclick="toggleConfig()" class="p-3 glass rounded-full">⚙️</button>
+            <button onclick="toggleConfig()" class="p-3 glass rounded-full active:scale-90 transition-transform">⚙️</button>
         </header>
 
-        <!-- Status Fall Detect -->
+        <!-- Fall Detect Banner -->
         <div id="fall-status" class="glass rounded-2xl p-3 text-center mb-6 border-red-500/30">
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest" id="txt-fall-status">Detecció de caigudes: DESACTIVADA</p>
         </div>
 
-        <!-- Botó Pànic -->
+        <!-- Botó SOS Principal -->
         <div class="flex-grow flex items-center justify-center relative">
+            <div class="absolute w-72 h-72 border border-white/5 rounded-full animate-ping opacity-20"></div>
             <button id="main-sos-btn" onclick="executarSOS('whatsapp')" class="bg-gradient-red w-64 h-64 rounded-full flex flex-col items-center justify-center panic-active border-8 border-white/5 relative z-10 active:scale-95 transition-transform">
                 <span class="text-6xl mb-2">🚨</span>
                 <span class="font-black text-2xl tracking-widest uppercase italic" id="btn-alert-text">ALERTA</span>
             </button>
         </div>
 
-        <!-- Eines ràpides -->
+        <!-- Eines de suport -->
         <div class="grid grid-cols-2 gap-4 mt-8">
-            <button onclick="triggerSiren()" id="siren-btn" class="glass p-5 rounded-[2rem] flex flex-col items-center gap-2">
+            <button onclick="triggerSiren()" id="siren-btn" class="glass p-5 rounded-[2rem] flex flex-col items-center gap-2 active:bg-white/10 transition-all">
                 <span class="text-2xl">🔊</span>
                 <span class="text-[10px] font-bold uppercase tracking-widest" id="txt-siren">Sirena</span>
             </button>
-            <button onclick="executarSOS('sms')" class="glass p-5 rounded-[2rem] flex flex-col items-center gap-2">
+            <button onclick="executarSOS('sms')" class="glass p-5 rounded-[2rem] flex flex-col items-center gap-2 active:bg-white/10 transition-all">
                 <span class="text-2xl">📩</span>
                 <span class="text-[10px] font-bold uppercase tracking-widest" id="txt-sms">Direct SMS</span>
             </button>
         </div>
 
-        <!-- Footer -->
         <footer class="mt-8 text-center opacity-20">
             <p class="text-[9px] font-bold tracking-[0.5em] uppercase">NeurekaLAB Shield Technology</p>
         </footer>
     </div>
 
-    <!-- PANTALLA COMPTE ENRERE (CAIGUDA) -->
+    <!-- PANTALLA CAIGUDA (OVERLAY) -->
     <div id="fall-overlay" class="hidden fixed inset-0 z-[200] bg-red-600 flex flex-col items-center justify-center p-8 text-center">
         <h2 class="text-3xl font-black mb-4" id="txt-fall-detected">CAIGUDA DETECTADA!</h2>
         <p class="mb-8" id="txt-fall-sub">S'enviarà un SOS automàtic en:</p>
         <div id="fall-timer" class="text-9xl font-black mb-12 italic">30</div>
-        <button onclick="cancelFall()" class="bg-black text-white w-full p-6 rounded-3xl font-black text-xl uppercase italic">ESTIGUEU BÉ / CANCEL·LAR</button>
+        <button onclick="cancelFall()" class="bg-black text-white w-full p-6 rounded-3xl font-black text-xl uppercase italic shadow-2xl active:scale-95">ESTIGUEU BÉ / CANCEL·LAR</button>
     </div>
 
-    <!-- CONFIGURACIÓ -->
+    <!-- CONFIGURACIÓ UI -->
     <div id="config-ui" class="hidden fixed inset-0 z-[150] bg-[#050505] p-8 flex flex-col">
         <h2 class="text-2xl font-black mb-8 text-red-500 italic uppercase">Setup</h2>
         
         <div class="space-y-6 flex-grow overflow-y-auto">
-            <div class="space-y-3">
-                <label class="text-[10px] font-bold text-slate-500 uppercase ml-2" id="txt-label-contacts">Contactes (amb 34)</label>
-                <input type="tel" id="tel1" placeholder="34600..." class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500">
-                <input type="tel" id="tel2" placeholder="34600..." class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500">
+            <div class="space-y-3 text-left">
+                <label class="text-[10px] font-bold text-slate-500 uppercase ml-2" id="txt-label-contacts">Contactes (amb prefix 34)</label>
+                <input type="tel" id="tel1" placeholder="34600000000" class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500 transition-colors">
+                <input type="tel" id="tel2" placeholder="34600000000" class="w-full glass p-4 rounded-2xl outline-none focus:border-red-500 transition-colors">
             </div>
 
             <div class="glass p-5 rounded-3xl flex items-center justify-between">
-                <div>
+                <div class="text-left">
                     <p class="font-bold text-sm" id="txt-label-fall">Detecció de caigudes</p>
                     <p class="text-[10px] text-slate-400 uppercase tracking-tighter" id="txt-fall-desc">Activa sensors de moviment</p>
                 </div>
                 <input type="checkbox" id="fall-toggle" onchange="toggleFallSensor()" class="w-6 h-6 accent-red-500">
             </div>
 
-            <div>
-                <label class="text-[10px] font-bold text-slate-500 uppercase ml-2" id="txt-label-lang">Canviar Idioma</label>
-                <select onchange="setLang(this.value)" id="lang-select" class="w-full glass p-4 rounded-2xl outline-none appearance-none">
+            <div class="text-left">
+                <label class="text-[10px] font-bold text-slate-500 uppercase ml-2" id="txt-label-lang">Idioma / Language</label>
+                <select onchange="setLang(this.value)" id="lang-select" class="w-full glass p-4 rounded-2xl outline-none appearance-none bg-black">
                     <option value="ca">Català</option>
                     <option value="es">Español</option>
                     <option value="en">English</option>
@@ -120,11 +122,10 @@
             </div>
         </div>
 
-        <button onclick="guardarConfig()" class="w-full bg-red-600 p-5 rounded-3xl font-black uppercase tracking-widest shadow-xl mt-6 italic" id="btn-save">Guardar</button>
+        <button onclick="guardarConfig()" class="w-full bg-red-600 p-5 rounded-3xl font-black uppercase tracking-widest shadow-xl mt-6 italic active:bg-red-700" id="btn-save">Guardar</button>
     </div>
 
     <script>
-        // DICCIONARI D'IDIOMES
         const translations = {
             ca: {
                 title: "ALERTA", fall_status: "Detecció de caigudes: ", on: "ACTIVA", off: "DESACTIVADA",
@@ -163,7 +164,6 @@
         let sirenInterval = null;
         let fallTimer = null;
 
-        // INICIALITZACIÓ
         if (currentLang) {
             setLang(currentLang);
             document.getElementById('lang-overlay').classList.add('hidden');
@@ -196,7 +196,11 @@
             document.getElementById('fall-status').style.borderColor = fallActive ? "rgba(239, 68, 68, 0.5)" : "rgba(255, 255, 255, 0.1)";
         }
 
-        function toggleConfig() { document.getElementById('config-ui').classList.toggle('hidden'); }
+        function toggleConfig() { 
+            document.getElementById('tel1').value = localStorage.getItem('sos_t1') || "";
+            document.getElementById('tel2').value = localStorage.getItem('sos_t2') || "";
+            document.getElementById('config-ui').classList.toggle('hidden'); 
+        }
 
         function guardarConfig() {
             localStorage.setItem('sos_t1', document.getElementById('tel1').value);
@@ -204,7 +208,6 @@
             toggleConfig();
         }
 
-        // SIRENA (WEB AUDIO API)
         function triggerSiren() {
             const btn = document.getElementById('siren-btn');
             if (sirenInterval) {
@@ -213,22 +216,20 @@
                 btn.style.background = "";
                 return;
             }
-
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             sirenInterval = setInterval(() => {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(Math.random() * 500 + 1000, audioCtx.currentTime);
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(Math.random() * 800 + 800, audioCtx.currentTime);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.1);
                 btn.style.background = (btn.style.background === "") ? "rgba(239, 68, 68, 0.4)" : "";
-            }, 150);
+            }, 100);
         }
 
-        // SOS LOGIC
         function executarSOS(tipus) {
             const t1 = localStorage.getItem('sos_t1');
             const t2 = localStorage.getItem('sos_t2');
@@ -237,23 +238,21 @@
             navigator.geolocation.getCurrentPosition(pos => {
                 const mapUrl = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
                 const text = translations[currentLang].msg + mapUrl;
-                
                 if (tipus === 'sms') {
                     const sep = /iPad|iPhone|iPod/.test(navigator.userAgent) ? "," : ";";
                     window.location.href = `sms:${[t1,t2].filter(x=>x).join(sep)}?body=${encodeURIComponent(text)}`;
                 } else {
                     window.location.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
                 }
-            });
+            }, () => { alert("Activeu el GPS."); });
         }
 
-        // DETECCIÓ DE CAIGUDES (ACCELERÒMETRE)
         function toggleFallSensor() {
             fallActive = document.getElementById('fall-toggle').checked;
             if (fallActive) {
                 if (typeof DeviceMotionEvent.requestPermission === 'function') {
-                    DeviceMotionEvent.requestPermission().then(response => {
-                        if (response == 'granted') window.addEventListener('devicemotion', handleMotion);
+                    DeviceMotionEvent.requestPermission().then(resp => {
+                        if (resp == 'granted') window.addEventListener('devicemotion', handleMotion);
                     });
                 } else {
                     window.addEventListener('devicemotion', handleMotion);
@@ -267,9 +266,7 @@
         function handleMotion(event) {
             const acc = event.accelerationIncludingGravity;
             const total = Math.sqrt(acc.x**2 + acc.y**2 + acc.z**2);
-            if (total > 30) { // Llindar d'impacte fort
-                triggerFallCountdown();
-            }
+            if (total > 35) triggerFallCountdown(); 
         }
 
         function triggerFallCountdown() {

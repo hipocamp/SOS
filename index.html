@@ -3,230 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NeurekaLAB - Estimació Numèrica</title>
+    <title>SOS EMERGÈNCIA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icona de la App (Sirena vermella) -->
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/564/564619.png">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/564/564619.png">
+    
+    <!-- Configuració PWA per semblar una App nativa -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#ef4444">
+
     <style>
-        body { font-family: -apple-system, system-ui, sans-serif; background-color: #f8fafc; margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; color: #1e293b; }
-        #pantalla-inici, #pantalla-perfil, #pantalla-joc, #pantalla-final { display: none; flex-direction: column; flex-grow: 1; padding: 20px; text-align: center; justify-content: center; overflow-y: auto; }
-        
-        /* AVIS ORIENTACIÓ */
-        #orientation-warning {
-            display: none; position: fixed; inset: 0; background: #1e293b; color: white; 
-            z-index: 2000; flex-direction: column; align-items: center; justify-content: center; 
-            text-align: center; padding: 20px;
+        .panic-button {
+            box-shadow: 0 0 50px rgba(239, 68, 68, 0.4);
+            animation: pulse 2s infinite;
         }
-        .rotate-icon { font-size: 50px; margin-bottom: 20px; animation: rotate 2s infinite; }
-        @keyframes rotate { 0% { transform: rotate(0deg); } 50% { transform: rotate(-90deg); } 100% { transform: rotate(0deg); } }
-        
-        @media (orientation: portrait) {
-            #orientation-warning { display: flex; }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 30px rgba(239, 68, 68, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
-
-        /* Estils generals */
-        .card { background: white; padding: 25px; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; max-width: 500px; margin: 0 auto; width: 100%; box-sizing: border-box; }
-        .titol-sup { font-size: 10px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 15px; }
-        
-        .form-group { text-align: left; margin-bottom: 15px; }
-        label { font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 6px; display: block; }
-        input, select { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #f1f5f9; background: #f8fafc; font-size: 14px; outline: none; }
-        
-        .selector-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 5px; }
-        .option-btn { background: #f1f5f9; border: 2px solid #e2e8f0; padding: 10px 5px; border-radius: 12px; cursor: pointer; font-size: 10px; font-weight: bold; text-align: center; }
-        .option-btn.active { background: #dbeafe; border-color: #2563eb; color: #2563eb; transform: scale(1.03); }
-
-        .btn-principal { background-color: #cbd5e1; color: white; border: none; padding: 18px; border-radius: 16px; font-size: 16px; font-weight: 900; width: 100%; cursor: not-allowed; text-transform: uppercase; margin-top: 10px; }
-        .btn-principal.ready { background-color: #2563eb; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3); }
-        
-        /* Joc - Línia al 85% */
-        .game-header { height: 160px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .numero-gran { font-size: 100px; font-weight: 900; color: #0f172a; margin: 0; letter-spacing: -5px; }
-        
-        .line-wrapper { width: 85%; margin: 0 auto; position: relative; }
-        .line-container { position: relative; width: 100%; height: 140px; display: flex; align-items: center; cursor: crosshair; touch-action: none; }
-        .main-line { height: 5px; width: 100%; background: #334155; border-radius: 3px; }
-        .tick { position: absolute; width: 2px; height: 35px; background: #334155; }
-        .labels { display: flex; justify-content: space-between; font-weight: 900; font-size: 32px; color: #cbd5e1; font-style: italic; margin-bottom: -20px; }
-
-        .btn-final { background-color: #1e293b; margin-top: 10px; padding: 16px; border-radius: 14px; color: white; width: 100%; font-weight: bold; border: none; cursor: pointer; text-transform: uppercase; font-size: 12px; }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body>
+<body class="bg-slate-900 text-white font-sans overflow-hidden">
 
-    <!-- AVIS ORIENTACIÓ -->
-    <div id="orientation-warning">
-        <div class="rotate-icon">📱🔄</div>
-        <h2 style="font-style: italic; text-transform: uppercase;">Gira el dispositiu</h2>
-        <p style="color: #94a3b8; font-size: 14px;">Aquesta prova requereix que posis la pantalla en <b>horitzontal</b>.</p>
-    </div>
-
-    <!-- 1. PANTALLA INICI -->
-    <div id="pantalla-inici" style="display: flex;">
-        <div class="titol-sup">NeurekaLAB</div>
-        <div class="card">
-            <p style="font-size: 18px; text-align: left; line-height: 1.6; color: #334155; margin-bottom: 30px;">
-                Veuràs una línia en blanc, entre el 0 i el 100.<br><br>
-                Has de posicionar el nombre que veus en aquesta línia, tan bé i ràpid com puguis. <br><br>
-                Comencem?
-            </p>
-            <button class="btn-principal ready" onclick="anarAPerfil()">Endavant</button>
-        </div>
-    </div>
-
-    <!-- 2. PANTALLA PERFIL -->
-    <div id="pantalla-perfil">
-        <div class="card">
-            <div class="form-group">
-                <label>Sexe</label>
-                <div class="selector-group" style="grid-template-columns: 1fr 1fr;">
-                    <div class="option-btn sexe-opt" onclick="selectSexe(this, 'Masculi')">Masculí</div>
-                    <div class="option-btn sexe-opt" onclick="selectSexe(this, 'Femeni')">Femení</div>
-                </div>
+    <div class="max-w-md mx-auto h-screen flex flex-col items-center justify-center p-6 relative">
+        
+        <!-- PANTALLA PRINCIPAL -->
+        <div id="main-ui" class="text-center fade-in w-full">
+            <div class="mb-12">
+                <h1 class="text-3xl font-black tracking-tighter text-red-500 uppercase italic">SOS Emergència</h1>
+                <p class="text-slate-400 text-sm mt-2">Envia la teva ubicació GPS a la teva gent</p>
             </div>
-            <div class="form-group"><label>Data de naixement</label><input type="date" id="input-naixement" onchange="validarForm()"></div>
-            <div class="form-group">
-                <label>Nivell d'estudis</label>
-                <select id="input-estudis" onchange="validarForm()">
-                    <option value="">Selecciona...</option>
-                    <option value="1r ESO">1r ESO</option><option value="2n ESO">2n ESO</option><option value="3r ESO">3r ESO</option><option value="4t ESO">4t ESO</option>
-                    <option value="1r Batx">1r Batxillerat</option><option value="2n Batx">2n Batxillerat</option>
-                    <option value="1r GM">1r Grau Mig</option><option value="2n GM">2n Grau Mig</option>
-                    <option value="Universitari">Universitari</option><option value="Grau Superior">Grau Superior</option><option value="Graduat">Graduat</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Dispositiu</label>
-                <div class="selector-group">
-                    <div class="option-btn disp-opt" onclick="selectDisp(this, 'Mobil')">📱 Mòbil</div>
-                    <div class="option-btn disp-opt" onclick="selectDisp(this, 'Tablet')">📟 Tablet</div>
-                    <div class="option-btn disp-opt" onclick="selectDisp(this, 'PC')">💻 PC</div>
-                </div>
-            </div>
-            <button id="btn-comencar" class="btn-principal" onclick="comencarProva()" disabled>Començar Prova</button>
-        </div>
-    </div>
 
-    <!-- 3. PANTALLA JOC -->
-    <div id="pantalla-joc">
-        <div class="game-header">
-            <p id="label-ubica" class="titol-sup" style="visibility: hidden;">Ubica el número:</p>
-            <h1 id="target-number" class="numero-gran" style="visibility: hidden;">--</h1>
+            <!-- BOTÓ DE PÀNIC -->
+            <button onclick="enviarUbicacio()" class="panic-button w-48 h-48 bg-red-600 rounded-full flex flex-col items-center justify-center border-8 border-red-500 active:scale-90 transition-transform mb-16 mx-auto">
+                <span class="text-6xl mb-2">🚨</span>
+                <span class="font-black text-xl tracking-widest">AVISAR</span>
+            </button>
+
+            <!-- OPCIONS D'ENVIAMENT -->
+            <div class="grid grid-cols-1 gap-4 w-full px-4">
+                <button onclick="executarSOS('whatsapp')" class="bg-emerald-600 hover:bg-emerald-500 p-5 rounded-3xl font-black uppercase text-sm shadow-xl flex items-center justify-center gap-3">
+                    <span>📱 Enviar per WhatsApp</span>
+                </button>
+                <button onclick="executarSOS('sms')" class="bg-blue-600 hover:bg-blue-500 p-5 rounded-3xl font-black uppercase text-sm shadow-xl flex items-center justify-center gap-3">
+                    <span>📩 Enviar per SMS</span>
+                </button>
+            </div>
+
+            <!-- BOTÓ CONFIGURACIÓ -->
+            <button onclick="toggleConfig()" class="mt-12 text-slate-500 text-xs font-bold uppercase tracking-widest flex items-center gap-2 mx-auto border-b border-slate-800 pb-1">
+                ⚙️ Configurar Números
+            </button>
         </div>
-        <div class="line-wrapper">
-            <div class="labels"><span>0</span><span>100</span></div>
-            <div id="click-area" class="line-container">
-                <div class="main-line"></div>
-                <div class="tick" style="left: 0;"></div><div class="tick" style="right: 0;"></div>
+
+        <!-- PANTALLA CONFIGURACIÓ (MODAL) -->
+        <div id="config-ui" class="hidden absolute inset-0 bg-slate-900 z-50 p-8 flex flex-col">
+            <h2 class="text-2xl font-black mb-6 text-red-500 uppercase tracking-tight italic">Configuració</h2>
+            <p class="text-slate-400 text-xs mb-8 font-bold uppercase tracking-wide">Posa els telèfons de confiança (amb prefix 34):</p>
+            
+            <div class="space-y-4 flex-grow">
+                <input type="tel" id="tel1" placeholder="Telèfon 1 (ex: 34600000000)" class="w-full bg-slate-800 border-2 border-slate-700 p-4 rounded-2xl outline-none focus:border-red-500 transition-colors">
+                <input type="tel" id="tel2" placeholder="Telèfon 2" class="w-full bg-slate-800 border-2 border-slate-700 p-4 rounded-2xl outline-none focus:border-red-500 transition-colors">
+                <input type="tel" id="tel3" placeholder="Telèfon 3" class="w-full bg-slate-800 border-2 border-slate-700 p-4 rounded-2xl outline-none focus:border-red-500 transition-colors">
+                <input type="tel" id="tel4" placeholder="Telèfon 4" class="w-full bg-slate-800 border-2 border-slate-700 p-4 rounded-2xl outline-none focus:border-red-500 transition-colors">
+            </div>
+
+            <div class="space-y-3">
+                <button onclick="guardarConfig()" class="w-full bg-red-600 p-5 rounded-2xl font-black uppercase tracking-widest shadow-lg">Guardar Canvis</button>
+                <button onclick="toggleConfig()" class="w-full text-slate-500 font-bold uppercase text-xs py-2">Tornar</button>
             </div>
         </div>
-    </div>
 
-    <!-- 4. PANTALLA FINAL -->
-    <div id="pantalla-final">
-        <div class="card">
-            <h2 style="font-weight: 900; font-style: italic; text-transform: uppercase;">Prova finalitzada</h2>
-            <button class="btn-final" style="background-color: #2563eb;" onclick="descarregarCSV()">Descarregar CSV</button>
-            <button class="btn-final" onclick="enviarEmail()">Enviar per Email</button>
-        </div>
+        <footer class="absolute bottom-6 opacity-30 text-[9px] font-black tracking-[0.4em] uppercase">
+            NeurekaLAB Security
+        </footer>
     </div>
 
     <script>
-        let trials = [], currentIdx = 0, results = [], startTime = 0, userSexe = "", userDisp = "", interactuable = false;
+        // Carregar números guardats
+        window.onload = function() {
+            document.getElementById('tel1').value = localStorage.getItem('sos_tel1') || "";
+            document.getElementById('tel2').value = localStorage.getItem('sos_tel2') || "";
+            document.getElementById('tel3').value = localStorage.getItem('sos_tel3') || "";
+            document.getElementById('tel4').value = localStorage.getItem('sos_tel4') || "";
+        };
 
-        function anarAPerfil() { document.getElementById('pantalla-inici').style.display = 'none'; document.getElementById('pantalla-perfil').style.display = 'flex'; }
-        function selectSexe(el, val) { document.querySelectorAll('.sexe-opt').forEach(b => b.classList.remove('active')); el.classList.add('active'); userSexe = val; validarForm(); }
-        function selectDisp(el, val) { document.querySelectorAll('.disp-opt').forEach(b => b.classList.remove('active')); el.classList.add('active'); userDisp = val; validarForm(); }
-        function validarForm() {
-            const naix = document.getElementById('input-naixement').value, est = document.getElementById('input-estudis').value, btn = document.getElementById('btn-comencar');
-            btn.disabled = !(userSexe && userDisp && naix && est);
-            if (!btn.disabled) btn.classList.add('ready'); else btn.classList.remove('ready');
+        function toggleConfig() {
+            document.getElementById('config-ui').classList.toggle('hidden');
         }
 
-        function generarNumbers() {
-            let n = [];
-            for(let i=0; i<10; i++){
-                let min = i*10, max = (i+1)*10 - 1;
-                if(min === 0) min = 1; if(max >= 100) max = 99;
-                n.push(Math.floor(Math.random() * (max - min + 1)) + min);
+        function guardarConfig() {
+            localStorage.setItem('sos_tel1', document.getElementById('tel1').value);
+            localStorage.setItem('sos_tel2', document.getElementById('tel2').value);
+            localStorage.setItem('sos_tel3', document.getElementById('tel3').value);
+            localStorage.setItem('sos_tel4', document.getElementById('tel4').value);
+            alert("Números guardats correctament!");
+            toggleConfig();
+        }
+
+        function executarSOS(tipus) {
+            const t1 = localStorage.getItem('sos_tel1');
+            const t2 = localStorage.getItem('sos_tel2');
+            const t3 = localStorage.getItem('sos_tel3');
+            const t4 = localStorage.getItem('sos_tel4');
+
+            if (!t1 && !t2) {
+                alert("Primer has de configurar algun número de telèfon!");
+                toggleConfig();
+                return;
             }
-            return n.sort(() => Math.random() - 0.5);
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const mapUrl = `https://www.google.com/maps?q=${lat},${lon}`;
+                    const text = `ESTINC EN EMERGÈNCIA. La meva ubicació actual és: ${mapUrl}`;
+
+                    if (tipus === 'sms') {
+                        // Enviament massiu SMS
+                        const numeros = [t1, t2, t3, t4].filter(t => t !== "").join(
+                            /iPad|iPhone|iPod/.test(navigator.userAgent) ? "," : ";"
+                        );
+                        window.location.href = `sms:${numeros}?body=${encodeURIComponent(text)}`;
+                    } else {
+                        // WhatsApp (obrim l'app amb el missatge ja escrit per triar el grup o contacte ràpidament)
+                        window.location.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                    }
+                }, function() {
+                    alert("Error: Activa el GPS del mòbil per enviar l'ubicació.");
+                });
+            } else {
+                alert("GPS no disponible al teu mòbil.");
+            }
         }
 
-        function comencarProva() {
-            document.getElementById('pantalla-perfil').style.display = 'none';
-            document.getElementById('pantalla-joc').style.display = 'flex';
-            
-            trials = generarNumbers(); 
-            currentIdx = 0; 
-            results = [];
-            interactuable = false;
-
-            // EL PRIMER ESTÍMUL TAMBÉ TÉ DEMORA:
-            // S'amaga el número i el text, i esperem 2 segons abans de cridar carregarNouNumero()
-            document.getElementById('target-number').style.visibility = 'hidden';
-            document.getElementById('label-ubica').style.visibility = 'hidden';
-            
-            setTimeout(carregarNouNumero, 2000);
-        }
-
-        function carregarNouNumero() {
-            if (currentIdx >= trials.length) { finalitzar(); return; }
-            document.getElementById('target-number').innerText = trials[currentIdx];
-            document.getElementById('target-number').style.visibility = 'visible';
-            document.getElementById('label-ubica').style.visibility = 'visible';
-            startTime = performance.now();
-            interactuable = true;
-        }
-
-        const area = document.getElementById('click-area');
-        area.addEventListener('mousedown', tractarClic);
-        area.addEventListener('touchstart', (e) => { e.preventDefault(); tractarClic(e.touches[0]); });
-
-        function tractarClic(e) {
-            if (!interactuable) return;
-            interactuable = false;
-            const tempsMs = Math.round(performance.now() - startTime);
-            const rect = area.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const percent = Math.max(0, Math.min(1, x / rect.width));
-            const guess = Math.round(percent * 100);
-            
-            results.push({ 
-                intent: currentIdx+1, 
-                sexe: userSexe, 
-                naix: document.getElementById('input-naixement').value, 
-                est: document.getElementById('input-estudis').value, 
-                disp: userDisp, 
-                target: trials[currentIdx], 
-                resposta: guess, 
-                error: Math.abs(trials[currentIdx] - guess), 
-                temps: tempsMs 
-            });
-
-            // Amagar número per a la pausa
-            document.getElementById('target-number').style.visibility = 'hidden';
-            document.getElementById('label-ubica').style.visibility = 'hidden';
-            
-            currentIdx++;
-            setTimeout(carregarNouNumero, 2000);
-        }
-
-        function finalitzar() { document.getElementById('pantalla-joc').style.display = 'none'; document.getElementById('pantalla-final').style.display = 'flex'; }
-        
-        function getCSV() {
-            let csv = "Intent;Sexe;Naixement;Estudis;Dispositiu;Target;Resposta;Error;Temps_ms\n";
-            results.forEach(r => { csv += `${r.intent};${r.sexe};${r.naix};${r.est};${r.disp};${r.target};${r.resposta};${r.error};${r.temps}\n`; });
-            return csv;
-        }
-
-        function descarregarCSV() {
-            const blob = new Blob([getCSV()], {type: 'text/csv;charset=utf-8;'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = `LN_resultats_${new Date().getTime()}.csv`;
-            document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        }
-
-        function enviarEmail() {
-            window.location.href = `mailto:neurekalab@exemple.com?subject=Resultats LN&body=${encodeURIComponent(getCSV())}`;
-        }
+        // El botó gran de dalt fa l'acció per defecte de WhatsApp
+        function enviarUbicacio() { executarSOS('whatsapp'); }
     </script>
 </body>
 </html>

@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/564/564619.png">
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/564/564619.png">
+    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#050505">
@@ -15,23 +16,24 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; color: white; margin: 0; height: 100dvh; overflow: hidden; -webkit-tap-highlight-color: transparent; }
         
-        /* PANTALLES */
-        .app-screen { position: fixed; inset: 0; width: 100%; height: 100dvh; display: none; flex-direction: column; z-index: 10; box-sizing: border-box; }
-        
+        /* PANTALLES: L'idioma és FLEX per defecte */
+        .app-screen { position: fixed; inset: 0; width: 100%; height: 100dvh; display: none; flex-direction: column; z-index: 10; box-sizing: border-box; padding: 24px; }
+        #lang-overlay { display: flex; background: black; z-index: 1000; }
+
         .bg-gradient-red { background: radial-gradient(circle, #ef4444 0%, #7f1d1d 100%); }
         .panic-active { animation: ring 1.5s infinite; }
         @keyframes ring { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 35px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
         .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
         
-        .footer-brand { position: absolute; bottom: 25px; left: 0; right: 0; text-align: center; opacity: 0.8; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4em; pointer-events: none; color: #94a3b8; z-index: 100; }
+        .footer-brand { position: fixed; bottom: 25px; left: 0; right: 0; text-align: center; opacity: 0.8; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4em; pointer-events: none; color: #94a3b8; z-index: 2000; }
         select option { background: #111; color: white; }
     </style>
 </head>
 <body class="text-center">
 
-    <!-- 1. PANTALLA SELECCIÓ IDIOMA (S'activa per JS) -->
-    <div id="lang-overlay" class="app-screen bg-black" style="z-index: 1000;">
-        <div class="flex-grow flex flex-col items-center justify-center p-8">
+    <!-- 1. PANTALLA SELECCIÓ IDIOMA (Sempre visible al carregat inicial) -->
+    <div id="lang-overlay" class="app-screen">
+        <div class="flex-grow flex flex-col items-center justify-center">
             <h1 class="text-3xl font-extrabold mb-2 text-red-600 italic uppercase leading-none">SOSPRO</h1>
             <p class="text-slate-400 text-[10px] mb-8 font-bold uppercase tracking-widest text-center">Powered by Latte Technology</p>
             <div class="grid grid-cols-1 gap-3 w-full max-w-xs text-center">
@@ -42,17 +44,16 @@
                 <button onclick="setLang('de')" class="p-4 glass rounded-2xl font-bold border-l-4 border-yellow-600">Deutsch (+49)</button>
             </div>
         </div>
-        <div class="footer-brand text-white">Latte Technology</div>
     </div>
 
     <!-- 2. PANTALLA PRINCIPAL -->
-    <div id="main-app" class="app-screen bg-[#050505] p-6">
+    <div id="main-app" class="app-screen bg-[#050505]">
         <header class="flex justify-between items-center mb-2">
             <div class="flex items-center gap-2">
                 <div class="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center font-black shadow-lg">S</div>
                 <span class="font-black text-xl tracking-tighter uppercase italic leading-none">SOS<span class="text-red-600">PRO</span></span>
             </div>
-            <button onclick="toggleScreen('config-ui', true)" class="p-3 glass rounded-full active:scale-90 transition-transform">⚙️</button>
+            <button onclick="toggleScreen('config-ui', true)" class="p-3 glass rounded-full active:scale-90 transition-transform text-lg">⚙️</button>
         </header>
 
         <div id="fall-banner" class="glass rounded-2xl p-2 text-center mb-2 border-red-500/30 transition-all">
@@ -76,21 +77,19 @@
                 <span class="text-[10px] font-bold uppercase tracking-widest">WhatsApp</span>
             </button>
         </div>
-        <div class="footer-brand">Latte Technology</div>
     </div>
 
-    <!-- 3. PANTALLA EMERGÈNCIA CAIGUDA -->
-    <div id="fall-overlay" class="app-screen bg-red-600 items-center justify-center p-8 text-white z-[500]">
+    <!-- 3. PANTALLA CAIGUDA (PANTALLA VERMELLA) -->
+    <div id="fall-overlay" class="app-screen bg-red-600 items-center justify-center p-8 text-white z-[2000]">
         <h1 class="text-6xl mb-4 animate-bounce">⚠️</h1>
         <h2 class="text-3xl font-black mb-2 uppercase italic text-center" id="txt-fall-det-title">CAIGUDA!</h2>
         <p class="mb-8 font-bold text-sm opacity-90" id="txt-fall-det-sub">SOS automàtic en:</p>
         <div id="fall-timer" class="text-9xl font-black mb-12 italic tracking-tighter">30</div>
-        <button onclick="cancelFall()" class="bg-black text-white w-full p-6 rounded-3xl font-black text-xl uppercase italic shadow-2xl active:scale-95">ESTIC BÉ / CANCEL·LAR</button>
-        <div class="footer-brand text-white">Latte Technology</div>
+        <button onclick="cancelFall()" class="bg-black text-white w-full p-6 rounded-3xl font-black text-xl uppercase italic shadow-2xl active:scale-95 transition-transform" id="btn-cancel-fall">ESTIC BÉ / CANCEL·LAR</button>
     </div>
 
     <!-- 4. PANTALLA CONFIGURACIÓ -->
-    <div id="config-ui" class="app-screen bg-[#050505] p-6 z-[150] overflow-y-auto text-left">
+    <div id="config-ui" class="app-screen bg-[#050505] z-[1500] overflow-y-auto text-left">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-xl font-black text-red-500 italic uppercase tracking-tighter" id="txt-setup-title">Setup</h2>
             <button onclick="toggleScreen('config-ui', false)" class="text-slate-500 text-xs font-bold uppercase">Tancar</button>
@@ -98,7 +97,7 @@
         
         <div class="space-y-4 flex-grow pb-32">
             <div class="space-y-2">
-                <label class="text-[10px] font-bold text-slate-500 uppercase ml-2" id="txt-contacts-label">Contactes (5)</label>
+                <label class="text-[10px] font-bold text-slate-500 uppercase ml-2" id="txt-contacts-label">Fins a 5 Contactes</label>
                 <input type="tel" id="tel1" class="w-full glass p-3 rounded-xl outline-none focus:border-red-500 text-sm font-mono tracking-wider">
                 <input type="tel" id="tel2" class="w-full glass p-3 rounded-xl outline-none focus:border-red-500 text-sm font-mono tracking-wider">
                 <input type="tel" id="tel3" class="w-full glass p-3 rounded-xl outline-none focus:border-red-500 text-sm font-mono tracking-wider">
@@ -106,19 +105,17 @@
                 <input type="tel" id="tel5" class="w-full glass p-3 rounded-xl outline-none focus:border-red-500 text-sm font-mono tracking-wider">
             </div>
 
-            <!-- Detecció de caigudes -->
             <div class="glass p-4 rounded-2xl flex items-center justify-between mt-4">
                 <div>
                     <p class="font-bold text-sm" id="txt-fall-config-title">Detecció de caigudes</p>
-                    <button onclick="testSensor()" class="text-[9px] text-blue-400 font-bold uppercase underline">Fer un test del sensor</button>
+                    <button onclick="alert('Sacseja el mòbil fort per provar.')" class="text-[9px] text-blue-400 font-bold uppercase underline italic">Test de sensor</button>
                 </div>
                 <input type="checkbox" id="fall-toggle" onchange="toggleFallSensor()" class="w-6 h-6 accent-red-500">
             </div>
 
-            <!-- Idioma a Configuració -->
             <div class="mt-6">
                 <label class="text-[10px] font-bold text-slate-500 uppercase ml-2" id="txt-lang-label">Idioma / Language</label>
-                <select onchange="setLang(this.value)" id="lang-select" class="w-full glass p-4 rounded-xl outline-none bg-black font-bold text-white appearance-none">
+                <select onchange="setLang(this.value)" id="lang-select" class="w-full glass p-4 rounded-xl outline-none bg-black font-bold text-white appearance-none border-none">
                     <option value="ca">Català</option>
                     <option value="es">Español</option>
                     <option value="en">English</option>
@@ -128,11 +125,13 @@
             </div>
         </div>
 
-        <div class="p-6 flex flex-col items-center bg-black border-t border-white/5">
-            <button onclick="guardarConfig()" class="w-full bg-red-600 p-5 rounded-2xl font-black uppercase italic active:bg-red-700 shadow-xl" id="btn-save">Desar</button>
-            <div class="mt-4 footer-brand relative bottom-0">Latte Technology</div>
+        <div class="fixed bottom-0 left-0 right-0 p-6 bg-black border-t border-white/5 flex flex-col items-center">
+            <button onclick="guardarConfig()" class="w-full bg-red-600 p-5 rounded-2xl font-black uppercase italic active:bg-red-700 shadow-xl text-white" id="btn-save">Desar</button>
         </div>
     </div>
+
+    <!-- MARCA LATTE TECHNOLOGY (FORA DE LES PANTALLES) -->
+    <div class="footer-brand">Latte Technology</div>
 
     <script>
         const translations = {
@@ -148,10 +147,13 @@
         let fallTimer = null;
         let audioCtx = null;
 
-        // INICIALITZACIÓ
-        window.addEventListener('load', () => {
-            if (currentLang) { setLang(currentLang); } 
-            else { document.getElementById('lang-overlay').style.display = 'flex'; }
+        // INICIALITZACIÓ IMMEDIATA
+        window.addEventListener('DOMContentLoaded', () => {
+            if (currentLang) {
+                setLang(currentLang);
+            } else {
+                document.getElementById('lang-overlay').style.display = 'flex';
+            }
         });
 
         function setLang(lang) {
@@ -159,6 +161,7 @@
             localStorage.setItem('sos_lang', lang);
             const t = translations[lang];
 
+            // Traduccions
             document.getElementById('btn-alert-text').innerText = t.alert;
             document.getElementById('txt-fall-label').innerText = t.fall_label;
             document.getElementById('txt-siren').innerText = t.siren;
@@ -180,7 +183,6 @@
 
             document.getElementById('lang-overlay').style.display = 'none';
             document.getElementById('main-app').style.display = 'flex';
-            setTimeout(() => { document.getElementById('main-app').style.opacity = '1'; }, 20);
             updateUI();
         }
 
@@ -200,13 +202,13 @@
 
         function triggerSiren() {
             if (window.sirenInt) { clearInterval(window.sirenInt); window.sirenInt = null; document.getElementById('siren-btn').style.background = ""; return; }
-            audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             window.sirenInt = setInterval(() => {
                 const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
                 osc.type = 'sawtooth'; osc.frequency.setValueAtTime(Math.random() * 800 + 1000, audioCtx.currentTime);
                 gain.gain.setValueAtTime(1.0, audioCtx.currentTime);
                 osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
                 document.getElementById('siren-btn').style.background = "rgba(239, 68, 68, 0.5)";
             }, 150);
         }
@@ -225,7 +227,6 @@
             }, () => alert("Error GPS."));
         }
 
-        // --- LÒGICA DE CAIGUDES MILLORADA ---
         function toggleFallSensor() {
             fallActive = document.getElementById('fall-toggle').checked;
             localStorage.setItem('sos_fall_active', fallActive);
@@ -233,7 +234,6 @@
                 if (typeof DeviceMotionEvent.requestPermission === 'function') {
                     DeviceMotionEvent.requestPermission().then(resp => {
                         if (resp == 'granted') window.addEventListener('devicemotion', monitor);
-                        else alert("Permís denegat per als sensors.");
                     });
                 } else { window.addEventListener('devicemotion', monitor); }
             } else { window.removeEventListener('devicemotion', monitor); }
@@ -244,30 +244,22 @@
             const acc = event.accelerationIncludingGravity;
             if (!acc) return;
             const total = Math.sqrt(acc.x**2 + acc.y**2 + acc.z**2);
-            // Llindar de caiguda realista (> 40 m/s2)
             if (total > 40) triggerFallCountdown();
-        }
-
-        function testSensor() {
-            alert("Prem OK i sacseja el mòbil fort per provar el sensor.");
-            toggleFallSensor();
         }
 
         function triggerFallCountdown() {
             if (fallTimer) return;
             toggleScreen('fall-overlay', true);
             let timeLeft = 30;
-            audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             fallTimer = setInterval(() => {
                 timeLeft--;
                 document.getElementById('fall-timer').innerText = timeLeft;
-                // So d'alerta
                 const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
                 osc.frequency.setValueAtTime(2500, audioCtx.currentTime);
                 gain.gain.setValueAtTime(1.0, audioCtx.currentTime);
                 osc.connect(gain); gain.connect(audioCtx.destination);
                 osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-
                 if (timeLeft <= 0) {
                     clearInterval(fallTimer); fallTimer = null;
                     executarSOS('sms');
